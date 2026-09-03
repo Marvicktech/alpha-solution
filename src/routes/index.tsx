@@ -16,6 +16,8 @@ import { HowItWorks } from "@/components/site/HowItWorks";
 import { WhoWeHelp } from "@/components/site/WhoWeHelp";
 import { Trust } from "@/components/site/Trust";
 import { FAQ, FAQS } from "@/components/site/FAQ";
+import { ChecklistCTA } from "@/components/site/ChecklistCTA";
+import { TrustStrip } from "@/components/site/TrustStrip";
 import { STEPS } from "@/components/site/HowItWorks";
 import { FinalCTA } from "@/components/site/FinalCTA";
 import { Footer } from "@/components/site/Footer";
@@ -195,6 +197,7 @@ function Index() {
       <main>
 
         <Hero onBook={handleBook} />
+        <TrustStrip />
         <Mission />
         <Problems />
         <ServicesPicker selected={selected} onSelect={handleSelect} showHuman={showHuman} />
@@ -207,6 +210,7 @@ function Index() {
         <WhoWeHelp />
         <Trust />
         <FAQ />
+        <ChecklistCTA />
         <FinalCTA onBook={handleBook} />
       </main>
       <Footer />

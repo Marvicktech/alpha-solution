@@ -12,6 +12,9 @@ const PROJECTS = [
     summary:
       "A clear, credible online presence with a single obvious route to getting in touch.",
     outcome: "One clear booking route, live and indexed.",
+    // Sourced directly from the client's own testimonial below — not a
+    // number we're estimating. Leave unset (see S9) rather than invent one.
+    stat: "+15 customers in week 1",
     image: onomzSite,
     alt: "Homepage of the Onomz website, a hair and braiding salon in Aberdeen, built by Alpha Presence",
   },
@@ -23,6 +26,7 @@ const PROJECTS = [
     summary:
       "Local search visibility and a booking journey built around how drivers actually search.",
     outcome: "Built around how drivers actually search for an MOT.",
+    stat: undefined as string | undefined,
     image: s9Site,
     alt: "Homepage of the S9 Direct Motor website, a DVSA-approved MOT testing centre, built by Alpha Presence",
   },
@@ -73,6 +77,12 @@ export function Work() {
                         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent"
                         aria-hidden="true"
                       />
+                      {p.stat && (
+                        <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-ink/85 px-3 py-1.5 text-xs font-bold text-on-ink shadow-[var(--shadow-glow)] backdrop-blur-sm">
+                          <span className="size-1.5 shrink-0 rounded-full bg-primary-glow" aria-hidden="true" />
+                          {p.stat}
+                        </span>
+                      )}
                     </>
                   ) : (
                     <div className="grid size-full place-items-center px-6 text-center">

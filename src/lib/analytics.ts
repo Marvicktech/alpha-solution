@@ -9,7 +9,8 @@ type EventName =
   | "booking_form_submit"
   | "booking_form_success"
   | "booking_form_error"
-  | "service_selected";
+  | "service_selected"
+  | "checklist_download";
 
 type EventProps = Record<string, string | number | boolean | null | undefined>;
 

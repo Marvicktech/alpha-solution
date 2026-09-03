@@ -173,6 +173,21 @@
 
 @utility hero-glow {
   background-image: var(--gradient-hero);
+  animation: glow-breathe 22s ease-in-out infinite;
+}
+
+/* Slow ambient drift for every section's background glow — same restrained,
+   "quietly alive" language as the hero photo loop, just carried through the
+   ink sections' background layer instead of a photo. Transform-only (never
+   touches the gradient stops), so it's cheap and never shifts layout. */
+@keyframes glow-breathe {
+  0%,
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate(-1%, 1.5%);
+  }
 }
 
 @utility glass-panel {
@@ -404,6 +419,31 @@ html.has-custom-cursor * {
   mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
 }
 
+/* Consultation-preview step mockup: each step's icon badge takes a slow
+   turn "lighting up" so the sequence quietly animates without looping fast
+   or feeling like a real recording. Apply with a per-step animationDelay
+   (see ConsultationPreview.tsx) so the three badges don't glow in unison. */
+@keyframes step-glow {
+  0%,
+  32%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary-glow) 0%, transparent);
+    transform: scale(1);
+  }
+  8% {
+    box-shadow: 0 0 0 8px color-mix(in oklab, var(--primary-glow) 22%, transparent);
+    transform: scale(1.06);
+  }
+  16% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary-glow) 0%, transparent);
+    transform: scale(1);
+  }
+}
+
+.step-glow {
+  animation: step-glow 9s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ambient-float {
     animation: none;
@@ -413,7 +453,15 @@ html.has-custom-cursor * {
     animation: none;
   }
 
+  .hero-glow {
+    animation: none;
+  }
+
   .marquee-track {
+    animation: none;
+  }
+
+  .step-glow {
     animation: none;
   }
 

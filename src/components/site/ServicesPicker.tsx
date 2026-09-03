@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Reveal } from "./Reveal";
+import workstationPhoto from "@/assets/services-workstation.jpg";
 import { SERVICES, SERVICE_TABLE, type ServiceId } from "./data";
 import { submitLead } from "./leads";
 import { SITE } from "@/config/site";
@@ -135,17 +136,31 @@ export function ServicesPicker({
     <section id="services" className="section-ink relative overflow-hidden py-24">
       <div className="hero-glow absolute inset-0 opacity-60" aria-hidden="true" />
       <div className="relative mx-auto max-w-6xl px-5">
-        <Reveal className="max-w-2xl">
-          <p className="text-sm font-semibold tracking-[0.2em] text-on-ink-muted uppercase">
-            Services
-          </p>
-          <h2 className="mt-4 heading-2 font-extrabold text-on-ink">
-            Six ways we help UK local businesses get found and get chosen.
-          </h2>
-          <p className="mt-4 text-on-ink-muted">
-            Choose the closest fit and the consultation form below fills itself in. Not sure? Say so and we'll work it out together on the call.
-          </p>
-        </Reveal>
+        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+          <Reveal className="max-w-2xl">
+            <p className="text-sm font-semibold tracking-[0.2em] text-on-ink-muted uppercase">
+              Services
+            </p>
+            <h2 className="mt-4 heading-2 font-extrabold text-on-ink">
+              Six ways we help UK local businesses get found and get chosen.
+            </h2>
+            <p className="mt-4 text-on-ink-muted">
+              Choose the closest fit and the consultation form below fills itself in. Not sure? Say so and we'll work it out together on the call.
+            </p>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <div className="mx-auto aspect-[4/5] max-w-sm overflow-hidden rounded-2xl border border-white/12 shadow-[var(--shadow-card)]">
+              <img
+                src={workstationPhoto}
+                alt="A design and development workspace, showing the site-build and UI/UX work Alpha Presence does for every project"
+                loading="lazy"
+                decoding="async"
+                className="size-full object-cover"
+              />
+            </div>
+          </Reveal>
+        </div>
 
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => {

@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Reveal } from "./Reveal";
+import { ConsultationPreview } from "./ConsultationPreview";
+import contactBanner from "@/assets/book-contact-banner.jpg";
 import { SERVICE_LABELS, type ServiceId } from "./data";
 import { submitLead, toDbService } from "./leads";
 import { track } from "@/lib/analytics";
@@ -79,7 +81,20 @@ export function BookingForm({
   return (
     <section id="book" className="bg-background py-24" aria-labelledby="book-heading">
       <div className="mx-auto max-w-3xl px-5">
-        <Reveal className="text-center">
+        <Reveal>
+          <div className="aspect-[21/8] overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
+            <img
+              src={contactBanner}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+              className="size-full object-cover"
+            />
+          </div>
+        </Reveal>
+
+        <Reveal delay={80} className="mt-10 text-center">
           <span className="inline-grid size-12 place-items-center rounded-2xl bg-accent text-accent-foreground">
             <CalendarCheck className="size-6" aria-hidden="true" />
           </span>
@@ -91,6 +106,8 @@ export function BookingForm({
             what is worth fixing first.
           </p>
         </Reveal>
+
+        <ConsultationPreview />
 
         <Reveal delay={100}>
           <form
