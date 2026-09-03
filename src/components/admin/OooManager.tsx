@@ -153,7 +153,7 @@ export function OooManager() {
         <Textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Note for yourself (optional) — e.g. \"Dentist appointment\""
+          placeholder="Note for yourself (optional) — e.g. Dentist appointment"
           className="mt-3"
           rows={2}
         />
