@@ -1,0 +1,24 @@
+{
+  // This file's job is mostly to EXIST: Cloudflare's Workers Builds pipeline
+  // only runs its automatic "framework detection" step (which tries to
+  // rewrite vite.config.ts to inject its own Cloudflare Vite plugin) when it
+  // finds no Wrangler config file in the repo. Our build already produces a
+  // correct, complete wrangler.json of its own — via Nitro's cloudflare-module
+  // preset, configured in vite.config.ts through @lovable.dev/vite-tanstack-config
+  // — at dist/server/wrangler.json after every `bun run build`. The values
+  // below are only a placeholder so autoconfig backs off before the build
+  // even runs; the real deploy uses the generated file (see the "deploy"
+  // script in package.json / Cloudflare's Deploy command setting).
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "alpha-solution",
+  "compatibility_date": "2026-08-31",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "dist/server/index.mjs",
+  "assets": {
+    "directory": "dist/client",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
