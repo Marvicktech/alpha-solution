@@ -150,7 +150,7 @@ export function ServicesPicker({
           </Reveal>
 
           <Reveal delay={100}>
-            <div className="relative mx-auto w-full max-w-[240px] sm:max-w-xs lg:max-w-none">
+            <div className="relative mx-auto w-[82%] max-w-xs sm:max-w-sm lg:w-full lg:max-w-none">
               <div className="aspect-[4/5] overflow-hidden rounded-2xl border border-white/12 shadow-[var(--shadow-card)]">
                 <img
                   src={workstationPhoto}

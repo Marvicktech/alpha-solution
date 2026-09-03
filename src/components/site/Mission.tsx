@@ -22,11 +22,11 @@ export function Mission() {
         </Reveal>
 
         <Reveal delay={100} className="lg:order-last">
-          {/* Capped narrower than the section on mobile so the photo reads as
-              a supporting visual under the heading it belongs to, not a
-              full-bleed block competing with it. Opens back up at lg, where
-              it sits in its own column beside the text. */}
-          <div className="relative mx-auto w-full max-w-[240px] sm:max-w-xs lg:max-w-none">
+          {/* Scaled to a comfortable share of the screen on mobile (not
+              full-bleed, not tiny) so the photo reads as a supporting visual
+              under the heading it belongs to. Opens back up at lg, where it
+              sits in its own column beside the text. */}
+          <div className="relative mx-auto w-[82%] max-w-xs sm:max-w-sm lg:w-full lg:max-w-none">
             <div className="aspect-[5/6] overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
               <img
                 src={consultationPhoto}
