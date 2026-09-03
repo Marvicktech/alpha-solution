@@ -66,7 +66,10 @@ export function BookingForm({
       track("booking_form_success", { service: get("service") || service || "unspecified" });
       toast.success("Thanks! We'll be in touch within 1 business day.");
       form.reset();
-    } catch {
+    } catch (err) {
+      // Logged so the real cause (RLS, network, etc.) shows up in the browser
+      // console instead of only the generic toast below.
+      console.error("[BookingForm] submitLead failed:", err);
       setFailed(true);
       track("booking_form_error", {});
       toast.error("Something went wrong sending your request. Please try again.");
