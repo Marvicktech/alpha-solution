@@ -81,7 +81,7 @@ export function Footer() {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`Alpha Solution on ${label}`}
+                    aria-label={`Alpha Presence on ${label}`}
                     className="grid size-10 place-items-center rounded-xl border border-white/20 bg-white/10 transition-colors hover:bg-white/20"
                   >
                     <Icon className="size-4" aria-hidden="true" />

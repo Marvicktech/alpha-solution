@@ -22,7 +22,7 @@ export function AdminShell({ email, children }: { email: string; children: React
         <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4">
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-primary" aria-hidden="true" />
-            <span className="text-sm font-semibold tracking-tight">Alpha Solution Admin</span>
+            <span className="text-sm font-semibold tracking-tight">Alpha Presence Admin</span>
           </div>
           <nav className="hidden items-center gap-1 sm:flex" aria-label="Admin sections">
             <span className="inline-flex items-center gap-1.5 rounded-md bg-accent px-2.5 py-1.5 text-xs font-medium text-accent-foreground">

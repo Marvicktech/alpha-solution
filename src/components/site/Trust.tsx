@@ -25,13 +25,13 @@ export function Trust() {
       <div className="mx-auto max-w-6xl px-5">
         <Reveal className="max-w-2xl">
           <p className="text-sm font-semibold tracking-[0.2em] text-on-ink-muted uppercase">
-            Why Alpha Solution
+            Why Alpha Presence
           </p>
           <h2 id="trust-heading" className="mt-4 heading-2 font-extrabold text-on-ink">
-            Why choose Alpha Solution?
+            Why choose Alpha Presence?
           </h2>
           <p className="mt-4 text-on-ink-muted">
-            Alpha Solution is a UK digital agency that builds online presence, UI/UX, automation
+            Alpha Presence is a UK digital agency that builds online presence, UI/UX, automation
             and SEO/AEO/GEO for local businesses. We work in plain English, at a fixed price
             agreed upfront. You own everything we build.
           </p>

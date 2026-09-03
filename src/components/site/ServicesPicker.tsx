@@ -37,7 +37,7 @@ function QuickContact() {
     try {
       await submitLead({
         name,
-        email: emailOk ? email : "not-provided@alphasolution.invalid",
+        email: emailOk ? email : "not-provided@alphapresence.invalid",
         phone: phoneOk ? phone : null,
         service_interest: "other",
         source: "live_person_request",
@@ -199,7 +199,7 @@ export function ServicesPicker({
           <div className="mt-4 overflow-x-auto rounded-2xl border border-white/12 bg-white/5 backdrop-blur-sm">
             <table className="w-full min-w-[38rem] border-collapse text-left text-sm">
               <caption className="sr-only">
-                Alpha Solution services, what each includes, and typical delivery timeframe
+                Alpha Presence services, what each includes, and typical delivery timeframe
               </caption>
               <thead>
                 <tr className="border-b border-white/12 text-on-ink">
@@ -249,7 +249,7 @@ export function ServicesPicker({
                         href={`https://wa.me/${SITE.whatsapp}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label="Chat with Alpha Solution on WhatsApp"
+                        aria-label="Chat with Alpha Presence on WhatsApp"
                       >
                         <MessageCircle aria-hidden="true" />
                         WhatsApp us
@@ -258,7 +258,7 @@ export function ServicesPicker({
                   )}
                   {SITE.phone && (
                     <Button variant="glass" size="lg" asChild>
-                      <a href={`tel:${SITE.phoneHref || SITE.phone}`} aria-label="Call Alpha Solution">
+                      <a href={`tel:${SITE.phoneHref || SITE.phone}`} aria-label="Call Alpha Presence">
                         <Phone aria-hidden="true" />
                         {SITE.phone}
                       </a>

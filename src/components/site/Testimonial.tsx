@@ -5,37 +5,37 @@ const TESTIMONIALS = [
   {
     category: "Website Conversion",
     quote:
-      "Alpha Solution did an amazing job improving our website. They didn't just make it look better; they focused on making the entire customer journey clearer and easier. Within just one week, we had 15 customers come through the website. That was a result we honestly didn't expect so quickly.",
+      "Alpha Presence did an amazing job improving our website. They didn't just make it look better; they focused on making the entire customer journey clearer and easier. Within just one week, we had 15 customers come through the website. That was a result we honestly didn't expect so quickly.",
     company: "Onomz Investments",
   },
   {
     category: "Business Automation",
     quote:
-      "Before working with Alpha Solution, a lot of our daily processes were still being handled manually. They helped us identify the repetitive tasks and introduced automation that made our workflow much more efficient. We reduced our manual workload by about 60%, and that has given us more time to focus on serving our customers and growing the business.",
+      "Before working with Alpha Presence, a lot of our daily processes were still being handled manually. They helped us identify the repetitive tasks and introduced automation that made our workflow much more efficient. We reduced our manual workload by about 60%, and that has given us more time to focus on serving our customers and growing the business.",
     company: "Abestos Services",
   },
   {
     category: "Google Business Profile Optimization",
     quote:
-      "Alpha Solution helped us optimize our Google Business Profile and improve how our business appeared in local search. They looked at the profile from both a visibility and customer perspective and made the necessary improvements. We started getting better visibility and more engagement from people searching for our services.",
+      "Alpha Presence helped us optimize our Google Business Profile and improve how our business appeared in local search. They looked at the profile from both a visibility and customer perspective and made the necessary improvements. We started getting better visibility and more engagement from people searching for our services.",
     company: "Onomz Investments",
   },
   {
     category: "AI & Automation",
     quote:
-      "Alpha Solution helped us see how AI and automation could actually fit into our business instead of just adding more tools to our workflow. They identified areas where we were wasting time and showed us how to automate them. The whole process became much more organized and efficient.",
+      "Alpha Presence helped us see how AI and automation could actually fit into our business instead of just adding more tools to our workflow. They identified areas where we were wasting time and showed us how to automate them. The whole process became much more organized and efficient.",
     company: "Tiri Solutions",
   },
   {
     category: "Business Growth Consultation",
     quote:
-      "My consultation with Alpha Solution gave me a completely different perspective on my business. They looked at what we were currently doing, identified the gaps, and showed me opportunities we weren't taking advantage of. Their strategy was focused on helping us scale the business 10x beyond where we were, with practical steps rather than just theory.",
+      "My consultation with Alpha Presence gave me a completely different perspective on my business. They looked at what we were currently doing, identified the gaps, and showed me opportunities we weren't taking advantage of. Their strategy was focused on helping us scale the business 10x beyond where we were, with practical steps rather than just theory.",
     company: "Tiri Ventures",
   },
   {
     category: "Marketing Automation (HubSpot)",
     quote:
-      "Alpha Solution did an excellent job enhancing our marketing automation through HubSpot. They demonstrated a strong understanding of workflow optimization and lead nurturing strategies. Their attention to detail and ability to align automation with our marketing goals greatly improved our lead generation efforts.",
+      "Alpha Presence did an excellent job enhancing our marketing automation through HubSpot. They demonstrated a strong understanding of workflow optimization and lead nurturing strategies. Their attention to detail and ability to align automation with our marketing goals greatly improved our lead generation efforts.",
     // PLACEHOLDER: no client/company name was supplied for this one yet.
     // Replace with the real business name before launch — do not invent one.
     company: "Client name pending",

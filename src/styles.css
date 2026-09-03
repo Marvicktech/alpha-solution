@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Alpha Solution design system.
+ * Alpha Presence design system.
  * Near-black glassmorphism dark sections + off-white light sections,
  * bold red-pink accent.
  */
@@ -195,6 +195,30 @@
   animation: ambient-float 9s ease-in-out infinite;
 }
 
+/* Soft, slow breathing loop for the hero photo: a gentle scale + very slight
+   pan, nothing that reads as "video-loop" busy — closer to a photo that's
+   quietly alive. object-position is nudged a couple of percent rather than
+   translated, so it can't reveal the edge of the source image at any point
+   in the loop. */
+@keyframes hero-photo-breathe {
+  0% {
+    transform: scale(1);
+    object-position: 80% 0%;
+  }
+  50% {
+    transform: scale(1.045);
+    object-position: 78% 2%;
+  }
+  100% {
+    transform: scale(1);
+    object-position: 80% 0%;
+  }
+}
+
+.hero-photo-breathe {
+  animation: hero-photo-breathe 14s ease-in-out infinite;
+}
+
 /* ---------- custom cursor ---------- */
 .cursor-layer {
   position: fixed;
@@ -224,17 +248,17 @@
 }
 
 .cursor-dot {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   background: var(--primary-glow);
-  box-shadow: 0 0 10px 1px color-mix(in oklab, var(--primary-glow) 60%, transparent);
+  box-shadow: 0 0 8px 1px color-mix(in oklab, var(--primary-glow) 60%, transparent);
   transition: opacity 0.15s ease;
 }
 
 .cursor-ring {
-  width: 42px;
-  height: 42px;
-  border: 2px solid color-mix(in oklab, var(--primary-glow) 70%, transparent);
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid color-mix(in oklab, var(--primary-glow) 70%, transparent);
   background: color-mix(in oklab, var(--primary) 8%, transparent);
   animation: cursor-breathe 2.4s ease-in-out infinite;
   transition:
@@ -246,17 +270,17 @@
 }
 
 .cursor-ring--active {
-  width: 74px;
-  height: 74px;
+  width: 44px;
+  height: 44px;
   border-color: var(--primary-glow);
-  box-shadow: 0 0 28px -2px color-mix(in oklab, var(--primary-glow) 80%, transparent);
+  box-shadow: 0 0 18px -2px color-mix(in oklab, var(--primary-glow) 80%, transparent);
   background: color-mix(in oklab, var(--primary) 14%, transparent);
   animation: none;
 }
 
 .cursor-ring--pressed {
-  width: 30px !important;
-  height: 30px !important;
+  width: 18px !important;
+  height: 18px !important;
   border-color: var(--primary-glow);
   background: color-mix(in oklab, var(--primary) 30%, transparent);
 }
@@ -382,6 +406,10 @@ html.has-custom-cursor * {
 
 @media (prefers-reduced-motion: reduce) {
   .ambient-float {
+    animation: none;
+  }
+
+  .hero-photo-breathe {
     animation: none;
   }
 

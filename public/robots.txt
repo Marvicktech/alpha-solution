@@ -65,4 +65,4 @@ User-agent: Amazonbot
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://alphasolution.lovable.app/sitemap.xml
+Sitemap: https://alphapresence.studio/sitemap.xml

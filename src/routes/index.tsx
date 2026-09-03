@@ -24,9 +24,9 @@ import type { ServiceId } from "@/components/site/data";
 import { track } from "@/lib/analytics";
 
 const TITLE =
-  "Alpha Solution | Digital Presence, UI/UX & Automation for UK Local Businesses";
+  "Alpha Presence | Digital Presence, UI/UX & Automation for UK Local Businesses";
 const DESCRIPTION =
-  "Alpha Solution helps UK local businesses get found on Google and AI search, look credible, and run smoother, with design, UI/UX, automation and SEO/AEO/GEO built in plain English. Book a free consultation.";
+  "Alpha Presence helps UK local businesses get found on Google and AI search, look credible, and run smoother, with design, UI/UX, automation and SEO/AEO/GEO built in plain English. Book a free consultation.";
 
 const SERVICE_SCHEMA = [
   {
@@ -63,7 +63,7 @@ const ORGANIZATION_LD = {
   "@context": "https://schema.org",
   "@type": ["Organization", "ProfessionalService"],
   "@id": "/#organization",
-  name: "Alpha Solution",
+  name: "Alpha Presence",
   url: "/",
   description: DESCRIPTION,
   slogan: "Get found, look credible, convert more.",
@@ -110,7 +110,7 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
-      { property: "og:site_name", content: "Alpha Solution" },
+      { property: "og:site_name", content: "Alpha Presence" },
       { property: "og:locale", content: "en_GB" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
@@ -136,9 +136,9 @@ export const Route = createFileRoute("/")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "HowTo",
-          name: "How to work with Alpha Solution",
+          name: "How to work with Alpha Presence",
           description:
-            "The three-step Alpha Solution process, from free consultation to launch, for UK local businesses.",
+            "The three-step Alpha Presence process, from free consultation to launch, for UK local businesses.",
           totalTime: "P28D",
           step: STEPS.map((s, i) => ({
             "@type": "HowToStep",

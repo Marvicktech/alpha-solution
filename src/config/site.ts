@@ -1,15 +1,15 @@
 /**
- * Single place for real-world Alpha Solution business details.
+ * Single place for real-world Alpha Presence business details.
  *
  * Anything left as an empty string is treated as "not confirmed yet" and is
  * simply not rendered anywhere on the site. Fill these in before launch —
  * never replace them with invented values.
  */
 export const SITE = {
-  name: "Alpha Solution",
+  name: "Alpha Presence",
   positioning:
-    "Alpha Solution: plain-English digital help for UK local businesses.",
-  /** e.g. "hello@alphasolution.co.uk" */
+    "Alpha Presence: plain-English digital help for UK local businesses.",
+  /** e.g. "hello@alphapresence.studio" */
   email: "",
   /** Display format, e.g. "020 7946 0000" */
   phone: "",

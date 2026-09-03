@@ -2,7 +2,7 @@ import { useState } from "react";
 
 /**
  * Lightweight animated SVG globe (orthographic projection) with glowing pins
- * for the places Alpha Solution has worked with real clients.
+ * for the places Alpha Presence has worked with real clients.
  * Pure SVG/CSS — no runtime animation library. Reduced-motion aware via CSS.
  *
  * NOTE: unused after the redesign (Hero now uses a full-bleed video

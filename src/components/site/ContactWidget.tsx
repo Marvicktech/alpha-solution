@@ -6,7 +6,7 @@ import { track } from "@/lib/analytics";
 
 /**
  * Floating contact crate: a small chat-style launcher that opens a glass panel
- * with the fastest ways to reach Alpha Solution. Only real, confirmed contact
+ * with the fastest ways to reach Alpha Presence. Only real, confirmed contact
  * details from `SITE` are shown.
  */
 export function ContactWidget({ onBook }: { onBook: () => void }) {
@@ -17,7 +17,7 @@ export function ContactWidget({ onBook }: { onBook: () => void }) {
       {open && (
         <div
           role="dialog"
-          aria-label="Contact Alpha Solution"
+          aria-label="Contact Alpha Presence"
           className="w-[min(92vw,20rem)] overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]"
         >
           <div className="section-ink px-5 py-4">

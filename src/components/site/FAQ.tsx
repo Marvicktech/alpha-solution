@@ -24,18 +24,18 @@ export const FAQS: FaqEntry[] = [
   // ---------------------------------------------------------------- General
   {
     group: "General",
-    q: "What does Alpha Solution do?",
-    a: "Alpha Solution is a UK digital agency that builds online presence, UI/UX, automation and SEO/AEO/GEO for local businesses. We help trades, clinics, salons, cafés, gyms and small professional practices get found on Google and in AI answers, look credible, and run smoother.",
+    q: "What does Alpha Presence do?",
+    a: "Alpha Presence is a UK digital agency that builds online presence, UI/UX, automation and SEO/AEO/GEO for local businesses. We help trades, clinics, salons, cafés, gyms and small professional practices get found on Google and in AI answers, look credible, and run smoother.",
   },
   {
     group: "General",
-    q: "Who does Alpha Solution work with?",
-    a: "Alpha Solution works exclusively with UK local businesses, from trades and salons to garages and independent services. That focus means we understand the customers you are trying to reach and the budgets you are working with. We do not build for venture-backed startups.",
+    q: "Who does Alpha Presence work with?",
+    a: "Alpha Presence works exclusively with UK local businesses, from trades and salons to garages and independent services. That focus means we understand the customers you are trying to reach and the budgets you are working with. We do not build for venture-backed startups.",
   },
   {
     group: "General",
-    q: "Where is Alpha Solution based?",
-    a: "Alpha Solution is UK-based and works remotely with local businesses across the United Kingdom. We also work with a small number of clients beyond the UK. Everything is handled over calls, video and email, so location is never a barrier.",
+    q: "Where is Alpha Presence based?",
+    a: "Alpha Presence is UK-based and works remotely with local businesses across the United Kingdom. We also work with a small number of clients beyond the UK. Everything is handled over calls, video and email, so location is never a barrier.",
   },
   {
     group: "General",
@@ -44,15 +44,15 @@ export const FAQS: FaqEntry[] = [
   },
   {
     group: "General",
-    q: "How do I get started with Alpha Solution?",
+    q: "How do I get started with Alpha Presence?",
     a: "You start by booking a free consultation through the form on this page. We review your current online presence, talk through what is and is not working, and give you a fixed quote before any work begins. There is no obligation to go ahead.",
   },
 
   // ------------------------------------------------------ Pricing & process
   {
     group: "Pricing & process",
-    q: "How much does a website or digital project cost with Alpha Solution?",
-    a: "Alpha Solution quotes every project after a free consultation, once the scope is clear. A simple brochure-style presence costs less than one with bookings, payments and automation built in. You get a fixed price upfront, agreed before any work starts. There are no hourly surprises and no retainers you cannot exit.",
+    q: "How much does a website or digital project cost with Alpha Presence?",
+    a: "Alpha Presence quotes every project after a free consultation, once the scope is clear. A simple brochure-style presence costs less than one with bookings, payments and automation built in. You get a fixed price upfront, agreed before any work starts. There are no hourly surprises and no retainers you cannot exit.",
   },
   {
     group: "Pricing & process",
@@ -82,7 +82,7 @@ export const FAQS: FaqEntry[] = [
   {
     group: "Pricing & process",
     q: "What happens after I submit the booking form?",
-    a: "After you submit the booking form, a real person from Alpha Solution reviews your details and replies within one business day. We usually suggest a short call to understand your business, then send a fixed quote. You are never added to a mailing list or chased with sales calls.",
+    a: "After you submit the booking form, a real person from Alpha Presence reviews your details and replies within one business day. We usually suggest a short call to understand your business, then send a fixed quote. You are never added to a mailing list or chased with sales calls.",
   },
   {
     group: "Pricing & process",
@@ -102,12 +102,12 @@ export const FAQS: FaqEntry[] = [
   {
     group: "Pricing & process",
     q: "How long does a project take?",
-    a: "Most Alpha Solution projects go from kickoff to launch in two to four weeks. Smaller presences can be quicker. Larger builds with automation, custom features or ongoing branding work take longer. We tell you the timeline upfront, before you commit, not halfway through the build.",
+    a: "Most Alpha Presence projects go from kickoff to launch in two to four weeks. Smaller presences can be quicker. Larger builds with automation, custom features or ongoing branding work take longer. We tell you the timeline upfront, before you commit, not halfway through the build.",
   },
   {
     group: "Pricing & process",
     q: "Do you offer support after the project launches?",
-    a: "Yes. Every Alpha Solution project includes 30 days of post-launch support, plus a handover where we walk you through everything you own. After that, optional ongoing care plans are available from around £45 a month, with no lock-in. You keep your domain, hosting and files either way.",
+    a: "Yes. Every Alpha Presence project includes 30 days of post-launch support, plus a handover where we walk you through everything you own. After that, optional ongoing care plans are available from around £45 a month, with no lock-in. You keep your domain, hosting and files either way.",
   },
 
   // ------------------------------------------------------------ Our services
@@ -228,7 +228,7 @@ export const FAQS: FaqEntry[] = [
   {
     group: "AEO, GEO & local search",
     q: "How do I get my business to show up in ChatGPT or Perplexity answers?",
-    a: "AI answer engines quote clear, factual, well-structured pages they can parse. You need plain answers near the top of each page, structured data describing your services, consistent business details everywhere online, and content written in the words customers actually use. Alpha Solution builds all of that in as standard.",
+    a: "AI answer engines quote clear, factual, well-structured pages they can parse. You need plain answers near the top of each page, structured data describing your services, consistent business details everywhere online, and content written in the words customers actually use. Alpha Presence builds all of that in as standard.",
   },
   {
     group: "AEO, GEO & local search",
@@ -264,13 +264,13 @@ export const FAQS: FaqEntry[] = [
   // ----------------------------------------------------- Trust & comparison
   {
     group: "Trust & comparison",
-    q: "How is Alpha Solution different from hiring a freelancer?",
-    a: "A freelancer usually covers one skill, while a project needs design, build, copy structure and search visibility working together. Alpha Solution handles the whole job with one fixed quote and one point of contact, and you are not left stranded if one person gets busy or moves on.",
+    q: "How is Alpha Presence different from hiring a freelancer?",
+    a: "A freelancer usually covers one skill, while a project needs design, build, copy structure and search visibility working together. Alpha Presence handles the whole job with one fixed quote and one point of contact, and you are not left stranded if one person gets busy or moves on.",
   },
   {
     group: "Trust & comparison",
-    q: "How is Alpha Solution different from a big agency?",
-    a: "Big agencies are built for big budgets, with account layers and retainers a local business does not need. Alpha Solution works only with UK local businesses, quotes a fixed price upfront, and explains everything in plain English. You talk to the people doing the work.",
+    q: "How is Alpha Presence different from a big agency?",
+    a: "Big agencies are built for big budgets, with account layers and retainers a local business does not need. Alpha Presence works only with UK local businesses, quotes a fixed price upfront, and explains everything in plain English. You talk to the people doing the work.",
   },
   {
     group: "Trust & comparison",

@@ -52,7 +52,7 @@ export function Navbar({ onBook }: { onBook: () => void }) {
           aria-label="Primary"
           className="flex w-full max-w-md items-center gap-1 rounded-full border border-white/50 bg-white/30 py-1.5 pr-1.5 pl-4 shadow-[0_8px_30px_-8px_rgba(0,0,0,0.45)] backdrop-blur-xl backdrop-saturate-150 sm:max-w-lg lg:max-w-2xl lg:pl-6 xl:max-w-3xl"
         >
-          <a href="#top" aria-label="Alpha Solution home" className="mr-auto inline-flex shrink-0">
+          <a href="#top" aria-label="Alpha Presence home" className="mr-auto inline-flex shrink-0">
             <Wordmark tone="light" showMark className="text-[0.95rem]" />
           </a>
 

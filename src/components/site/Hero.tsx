@@ -64,11 +64,16 @@ function HeroBackground() {
           it (which does span the full container) carries the rest of the
           way down so text stays legible against it either way. From `sm`
           up, content roughly fits one screen again, so the photo goes back
-          to filling the full container as before. */}
+          to filling the full container as before.
+
+          `.hero-photo-breathe` (styles.css) adds a slow, soft loop on top —
+          a gentle scale + a couple of percent of object-position drift, 14s
+          ease-in-out — so the photo feels quietly alive without looking like
+          a video background. Disabled under prefers-reduced-motion. */}
       <img
         src={heroPhoto}
         alt=""
-        className="absolute inset-x-0 top-0 h-[58svh] w-full object-cover object-[80%_0%] [-webkit-mask-image:linear-gradient(to_bottom,#000_80%,transparent_100%)] [mask-image:linear-gradient(to_bottom,#000_80%,transparent_100%)] sm:inset-0 sm:h-full sm:[-webkit-mask-image:none] sm:[mask-image:none]"
+        className="hero-photo-breathe absolute inset-x-0 top-0 h-[58svh] w-full object-cover object-[80%_0%] [-webkit-mask-image:linear-gradient(to_bottom,#000_80%,transparent_100%)] [mask-image:linear-gradient(to_bottom,#000_80%,transparent_100%)] sm:inset-0 sm:h-full sm:[-webkit-mask-image:none] sm:[mask-image:none]"
         loading="eager"
         fetchPriority="high"
       />
@@ -107,7 +112,7 @@ export function Hero({ onBook }: { onBook: () => void }) {
 
           <p className="mt-6 max-w-xl text-sm leading-relaxed text-on-ink-muted sm:text-base">
             Most local businesses only tap into a fraction of what the digital space can do
-            for them. That's where Alpha Solution comes in: we help you 10x your bookings
+            for them. That's where Alpha Presence comes in: we help you 10x your bookings
             with a site, automation and search presence built to convert.
           </p>
         </Reveal>

@@ -5,7 +5,7 @@ export function WorkShowcase() {
   return (
     <div className="ambient-float">
       <p className="mb-3 text-xs font-bold tracking-widest uppercase text-on-ink-muted">
-        Recent work · Built by Alpha Solution
+        Recent work · Built by Alpha Presence
       </p>
 
       <a
@@ -13,7 +13,7 @@ export function WorkShowcase() {
         target="_blank"
         rel="noopener noreferrer"
         className="group block overflow-hidden rounded-2xl border border-white/15 bg-white/5 shadow-[var(--shadow-glow)] backdrop-blur-md transition-all duration-300 hover:border-white/30"
-        aria-label="View the ONOMZ website, built by Alpha Solution (opens in a new tab)"
+        aria-label="View the ONOMZ website, built by Alpha Presence (opens in a new tab)"
       >
         <div className="flex items-center gap-2 border-b border-white/10 bg-white/10 px-3 py-2.5">
           <span className="size-2.5 rounded-full bg-[#ff5f57]" aria-hidden="true" />
@@ -27,7 +27,7 @@ export function WorkShowcase() {
         <div className="relative">
           <img
             src={onomzSite}
-            alt="Homepage of ONOMZ, a natural hair and braiding salon in Aberdeen, Scotland, built by Alpha Solution"
+            alt="Homepage of ONOMZ, a natural hair and braiding salon in Aberdeen, Scotland, built by Alpha Presence"
             width={1280}
             height={720}
             loading="lazy"

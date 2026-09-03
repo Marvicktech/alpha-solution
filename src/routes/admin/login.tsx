@@ -10,11 +10,11 @@ export const Route = createFileRoute("/admin/login")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Team sign in | Alpha Solution" },
-      { name: "description", content: "Private sign in for the Alpha Solution team." },
+      { title: "Team sign in | Alpha Presence" },
+      { name: "description", content: "Private sign in for the Alpha Presence team." },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Team sign in | Alpha Solution" },
-      { property: "og:description", content: "Private sign in for the Alpha Solution team." },
+      { property: "og:title", content: "Team sign in | Alpha Presence" },
+      { property: "og:description", content: "Private sign in for the Alpha Presence team." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -84,7 +84,7 @@ function AdminLogin() {
       <div className="relative w-full max-w-sm rounded-2xl border border-white/15 bg-white/[0.07] p-8 backdrop-blur-md">
         <div className="mb-6 flex items-center gap-2 text-on-ink">
           <ShieldCheck className="h-5 w-5 text-primary-glow" aria-hidden="true" />
-          <span className="text-sm font-semibold tracking-tight">Alpha Solution · Team</span>
+          <span className="text-sm font-semibold tracking-tight">Alpha Presence · Team</span>
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-on-ink">Sign in</h1>
         <p className="mt-2 text-sm leading-relaxed text-on-ink-muted">
@@ -109,7 +109,7 @@ function AdminLogin() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="border-white/20 bg-white/10 text-on-ink placeholder:text-on-ink-muted/70"
-                placeholder="you@alphasolution.co.uk"
+                placeholder="you@alphapresence.co.uk"
               />
             </div>
             <div className="space-y-2">

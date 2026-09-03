@@ -58,7 +58,7 @@ export function Problems() {
           </h2>
           <p className="mt-4 text-muted-foreground">
             Most UK local businesses lose customers to a slow page and a search they never
-            appeared in, not to a better competitor. Alpha Solution fixes both.
+            appeared in, not to a better competitor. Alpha Presence fixes both.
           </p>
         </Reveal>
 

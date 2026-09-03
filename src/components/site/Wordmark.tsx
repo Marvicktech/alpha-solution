@@ -2,8 +2,8 @@ import { cn } from "@/lib/utils";
 import logoMark from "@/assets/logo-mark.png";
 
 /**
- * Alpha Solution identity: the real logo mark (a transparent PNG supplied
- * by the client — background removed), paired with the "Solution"
+ * Alpha Presence identity: the real logo mark (a transparent PNG supplied
+ * by the client — background removed), paired with the "Presence"
  * wordmark. The mark's own pink is fixed regardless of tone, so it reads
  * the same on dark and light surfaces.
  */
@@ -24,7 +24,7 @@ export function Wordmark({
         "text-lg sm:text-xl",
         className,
       )}
-      aria-label="Alpha Solution"
+      aria-label="Alpha Presence"
     >
       {showMark && (
         <img
@@ -40,7 +40,7 @@ export function Wordmark({
           dark ? "text-on-ink" : "text-foreground",
         )}
       >
-        Solution
+        Presence
       </span>
     </span>
   );

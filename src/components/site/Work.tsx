@@ -13,7 +13,7 @@ const PROJECTS = [
       "A clear, credible online presence with a single obvious route to getting in touch.",
     outcome: "One clear booking route, live and indexed.",
     image: onomzSite,
-    alt: "Homepage of the Onomz website, a hair and braiding salon in Aberdeen, built by Alpha Solution",
+    alt: "Homepage of the Onomz website, a hair and braiding salon in Aberdeen, built by Alpha Presence",
   },
   {
     name: "S9 Direct Motor",
@@ -24,7 +24,7 @@ const PROJECTS = [
       "Local search visibility and a booking journey built around how drivers actually search.",
     outcome: "Built around how drivers actually search for an MOT.",
     image: s9Site,
-    alt: "Homepage of the S9 Direct Motor website, a DVSA-approved MOT testing centre, built by Alpha Solution",
+    alt: "Homepage of the S9 Direct Motor website, a DVSA-approved MOT testing centre, built by Alpha Presence",
   },
 ];
 
