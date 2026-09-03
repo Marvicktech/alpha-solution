@@ -150,14 +150,19 @@ export function ServicesPicker({
           </Reveal>
 
           <Reveal delay={100}>
-            <div className="mx-auto aspect-[4/5] max-w-sm overflow-hidden rounded-2xl border border-white/12 shadow-[var(--shadow-card)]">
-              <img
-                src={workstationPhoto}
-                alt="A design and development workspace, showing the site-build and UI/UX work Alpha Presence does for every project"
-                loading="lazy"
-                decoding="async"
-                className="size-full object-cover"
-              />
+            <div className="relative mx-auto w-full max-w-[240px] sm:max-w-xs lg:max-w-none">
+              <div className="aspect-[4/5] overflow-hidden rounded-2xl border border-white/12 shadow-[var(--shadow-card)]">
+                <img
+                  src={workstationPhoto}
+                  alt="A design and development workspace, showing the site-build and UI/UX work Alpha Presence does for every project"
+                  loading="lazy"
+                  decoding="async"
+                  className="photo-breathe size-full object-cover"
+                />
+              </div>
+              <span className="absolute -bottom-4 right-4 max-w-[calc(100%-2rem)] rounded-xl border border-white/15 bg-ink/85 px-3.5 py-2 text-xs leading-snug font-bold text-on-ink shadow-[var(--shadow-card)] backdrop-blur-sm">
+                Design, build &amp; UI/UX
+              </span>
             </div>
           </Reveal>
         </div>

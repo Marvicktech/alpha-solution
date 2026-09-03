@@ -221,8 +221,8 @@
     object-position: 80% 0%;
   }
   50% {
-    transform: scale(1.045);
-    object-position: 78% 2%;
+    transform: scale(1.09);
+    object-position: 74% 4%;
   }
   100% {
     transform: scale(1);
@@ -231,7 +231,24 @@
 }
 
 .hero-photo-breathe {
-  animation: hero-photo-breathe 14s ease-in-out infinite;
+  animation: hero-photo-breathe 10s ease-in-out infinite;
+}
+
+/* Same "quietly alive" language as the hero photo, but with no baked-in
+   object-position offset, so it drops onto any photo card across the site
+   (Mission, ServicesPicker, BookingForm) regardless of that photo's crop. */
+@keyframes photo-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.07);
+  }
+}
+
+.photo-breathe {
+  animation: photo-breathe 11s ease-in-out infinite;
 }
 
 /* ---------- custom cursor ---------- */
@@ -462,6 +479,10 @@ html.has-custom-cursor * {
   }
 
   .step-glow {
+    animation: none;
+  }
+
+  .photo-breathe {
     animation: none;
   }
 

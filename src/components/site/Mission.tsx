@@ -21,15 +21,24 @@ export function Mission() {
           </p>
         </Reveal>
 
-        <Reveal delay={100} className="order-first lg:order-last">
-          <div className="mx-auto aspect-[5/6] max-w-sm overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)] lg:max-w-none">
-            <img
-              src={consultationPhoto}
-              alt="A consultation session where a plan is talked through on a flip chart, the kind of plain-English walkthrough every Alpha Presence project starts with"
-              loading="lazy"
-              decoding="async"
-              className="size-full object-cover"
-            />
+        <Reveal delay={100} className="lg:order-last">
+          {/* Capped narrower than the section on mobile so the photo reads as
+              a supporting visual under the heading it belongs to, not a
+              full-bleed block competing with it. Opens back up at lg, where
+              it sits in its own column beside the text. */}
+          <div className="relative mx-auto w-full max-w-[240px] sm:max-w-xs lg:max-w-none">
+            <div className="aspect-[5/6] overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
+              <img
+                src={consultationPhoto}
+                alt="A consultation session where a plan is talked through on a flip chart, the kind of plain-English walkthrough every Alpha Presence project starts with"
+                loading="lazy"
+                decoding="async"
+                className="photo-breathe size-full object-cover"
+              />
+            </div>
+            <span className="absolute -bottom-4 left-4 max-w-[calc(100%-2rem)] rounded-xl border border-border bg-card px-3.5 py-2 text-xs leading-snug font-bold shadow-[var(--shadow-card)]">
+              Where every project starts
+            </span>
           </div>
         </Reveal>
       </div>

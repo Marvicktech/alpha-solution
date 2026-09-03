@@ -81,20 +81,7 @@ export function BookingForm({
   return (
     <section id="book" className="bg-background py-24" aria-labelledby="book-heading">
       <div className="mx-auto max-w-3xl px-5">
-        <Reveal>
-          <div className="aspect-[21/8] overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
-            <img
-              src={contactBanner}
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              decoding="async"
-              className="size-full object-cover"
-            />
-          </div>
-        </Reveal>
-
-        <Reveal delay={80} className="mt-10 text-center">
+        <Reveal className="text-center">
           <span className="inline-grid size-12 place-items-center rounded-2xl bg-accent text-accent-foreground">
             <CalendarCheck className="size-6" aria-hidden="true" />
           </span>
@@ -105,6 +92,19 @@ export function BookingForm({
             Thirty minutes, no obligation. We look at how customers find you today and tell you
             what is worth fixing first.
           </p>
+        </Reveal>
+
+        <Reveal delay={60}>
+          <div className="mx-auto mt-8 aspect-[21/8] max-w-md overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)] sm:max-w-xl">
+            <img
+              src={contactBanner}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+              className="photo-breathe size-full object-cover"
+            />
+          </div>
         </Reveal>
 
         <ConsultationPreview />
