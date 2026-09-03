@@ -67,3 +67,91 @@ export async function fetchCalBookings(params: {
   }
   return json.data;
 }
+
+// --- Out-of-office (availability blocks) ---------------------------------
+// Cal.com blocks a date range for the account owner by creating an "OOO"
+// entry — every event type stops accepting bookings for that window. The
+// /v2/me/ooo endpoints don't take the cal-api-version header (unlike
+// /v2/bookings above), so it's deliberately omitted here.
+
+export type CalOooReason = "unspecified" | "vacation" | "travel" | "sick" | "public_holiday";
+
+export type CalOooEntry = {
+  id: number;
+  uuid: string;
+  start: string;
+  end: string;
+  notes?: string | null;
+  reason?: CalOooReason;
+};
+
+type CalOooListResponse = { status: "success" | "error"; data: CalOooEntry[] };
+type CalOooItemResponse = { status: "success" | "error"; data: CalOooEntry };
+
+function calOooHeaders(apiKey: string): HeadersInit {
+  return {
+    Authorization: `Bearer ${apiKey}`,
+    "Content-Type": "application/json",
+  };
+}
+
+export async function fetchOooEntries(): Promise<CalOooEntry[]> {
+  const apiKey = getCalApiKey();
+  const res = await fetch(`${CAL_API_BASE}/me/ooo?take=250&sortStart=asc`, {
+    headers: calOooHeaders(apiKey),
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Cal.com API error (${res.status}): ${body || res.statusText}`);
+  }
+
+  const json = (await res.json()) as CalOooListResponse;
+  if (json.status !== "success") {
+    throw new Error("Cal.com API returned an error response.");
+  }
+  return json.data;
+}
+
+export async function createOooEntry(input: {
+  start: string;
+  end: string;
+  notes?: string;
+  reason?: CalOooReason;
+}): Promise<CalOooEntry> {
+  const apiKey = getCalApiKey();
+  const res = await fetch(`${CAL_API_BASE}/me/ooo`, {
+    method: "POST",
+    headers: calOooHeaders(apiKey),
+    body: JSON.stringify({
+      start: input.start,
+      end: input.end,
+      notes: input.notes || undefined,
+      reason: input.reason ?? "unspecified",
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Cal.com API error (${res.status}): ${body || res.statusText}`);
+  }
+
+  const json = (await res.json()) as CalOooItemResponse;
+  if (json.status !== "success") {
+    throw new Error("Cal.com API returned an error response.");
+  }
+  return json.data;
+}
+
+export async function deleteOooEntry(id: number): Promise<void> {
+  const apiKey = getCalApiKey();
+  const res = await fetch(`${CAL_API_BASE}/me/ooo/${id}`, {
+    method: "DELETE",
+    headers: calOooHeaders(apiKey),
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Cal.com API error (${res.status}): ${body || res.statusText}`);
+  }
+}

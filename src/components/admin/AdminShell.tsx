@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { CalendarClock, Inbox, LogOut, ShieldCheck } from "lucide-react";
+import { CalendarClock, CalendarOff, Inbox, LogOut, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 
 export function AdminShell({ email, children }: { email: string; children: ReactNode }) {
@@ -39,6 +39,13 @@ export function AdminShell({ email, children }: { email: string; children: React
             >
               <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
               Cal.com bookings
+            </Link>
+            <Link
+              to="/admin/availability"
+              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground [&.active]:bg-accent [&.active]:text-accent-foreground"
+            >
+              <CalendarOff className="h-3.5 w-3.5" aria-hidden="true" />
+              Availability
             </Link>
           </nav>
           <div className="ml-auto flex items-center gap-3">
