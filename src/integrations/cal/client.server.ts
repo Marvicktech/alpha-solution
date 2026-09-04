@@ -162,7 +162,10 @@ export async function deleteOooEntry(id: number): Promise<void> {
 // bookings, and the event type's own working hours/buffers — nothing about
 // that logic needs to be duplicated here.
 
-const CAL_USERNAME = "alphapresenced";
+// Matches https://cal.com/alphapresenced/30min — only the slug is used
+// directly; the numeric event type id it maps to is resolved once (and
+// cached) via resolveEventTypeId() below, since looking events up by
+// username on this account 404s.
 const CAL_EVENT_TYPE_SLUG = "30min";
 
 export type CalSlot = { start: string; end?: string };
@@ -227,27 +230,64 @@ function parseSlotsResponse(json: unknown): CalSlotsByDate {
   return out;
 }
 
+// The `eventTypeSlug` + `username` combo that Cal.com's own docs describe
+// for this endpoint doesn't actually resolve for this account (confirmed by
+// a real 404 NOT_FOUND from api.cal.com — not a docs gap, an actual account
+// quirk) — `username` isn't even listed as a real query param on the current
+// docs page, only `eventTypeId` and `usernameList` are. Rather than guess
+// again, resolve the numeric event type id first (from the same "30min"
+// slug, via the authenticated event-types list) and query slots with that —
+// unambiguous, no slug/username resolution involved.
+let cachedEventTypeId: number | null = null;
+
+async function resolveEventTypeId(apiKey: string): Promise<number> {
+  if (cachedEventTypeId !== null) return cachedEventTypeId;
+
+  const res = await fetch(`${CAL_API_BASE}/event-types`, {
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "cal-api-version": "2024-06-14",
+    },
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Cal.com API error (${res.status}): ${body || res.statusText}`);
+  }
+  const json = (await res.json()) as {
+    status: "success" | "error";
+    data: { id: number; slug: string }[];
+  };
+  if (json.status !== "success") {
+    throw new Error("Cal.com API returned an error response.");
+  }
+  const match = json.data.find((et) => et.slug === CAL_EVENT_TYPE_SLUG);
+  if (!match) {
+    throw new Error(
+      `No Cal.com event type with slug "${CAL_EVENT_TYPE_SLUG}" found on this account.`,
+    );
+  }
+  cachedEventTypeId = match.id;
+  return match.id;
+}
+
 export async function fetchAvailableSlots(input: {
   startTime: string;
   endTime: string;
   timeZone?: string;
 }): Promise<CalSlotsByDate> {
-  // Deliberately unauthenticated: this is the same public lookup an
-  // anonymous visitor's browser makes on your real cal.com/alphapresenced/30min
-  // page before they've signed in to anything. Sending our personal API key
-  // here made Cal.com resolve the request in an authenticated context (your
-  // own account's org/team scope) instead of the plain public one, and it
-  // couldn't find "alphapresenced" there — hence the 404 NOT_FOUND. Dropping
-  // the Authorization header matches how the real booking page calls it.
+  const apiKey = getCalApiKey();
+  const eventTypeId = await resolveEventTypeId(apiKey);
+
   const search = new URLSearchParams({
     startTime: input.startTime,
     endTime: input.endTime,
-    eventTypeSlug: CAL_EVENT_TYPE_SLUG,
-    username: CAL_USERNAME,
+    eventTypeId: String(eventTypeId),
   });
   if (input.timeZone) search.set("timeZone", input.timeZone);
 
-  const res = await fetch(`${CAL_API_BASE}/slots/available?${search.toString()}`);
+  const res = await fetch(`${CAL_API_BASE}/slots/available?${search.toString()}`, {
+    headers: { Authorization: `Bearer ${apiKey}` },
+  });
 
   if (!res.ok) {
     const body = await res.text().catch(() => "");
@@ -278,6 +318,11 @@ export async function createCalBooking(input: {
   attendee: { name: string; email: string; timeZone?: string };
 }): Promise<CalCreatedBooking> {
   const apiKey = getCalApiKey();
+  // Use the resolved numeric id rather than eventTypeSlug+username — this
+  // account's username lookup 404s on the slots endpoint, so the same
+  // slug/username pair isn't trusted here either even though Cal.com's docs
+  // list it as valid for booking creation.
+  const eventTypeId = await resolveEventTypeId(apiKey);
   const res = await fetch(`${CAL_API_BASE}/bookings`, {
     method: "POST",
     headers: {
@@ -292,8 +337,7 @@ export async function createCalBooking(input: {
         email: input.attendee.email,
         timeZone: input.attendee.timeZone || "Europe/London",
       },
-      eventTypeSlug: CAL_EVENT_TYPE_SLUG,
-      username: CAL_USERNAME,
+      eventTypeId,
     }),
   });
 
