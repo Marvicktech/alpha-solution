@@ -23,6 +23,17 @@ type Errors = Partial<Record<"name" | "whatsapp" | "email" | "when", string>>;
 // slots request (and the calendar's disabled-day pass) cheap.
 const DAYS_AHEAD = 21;
 
+// The WhatsApp field only collects the local part (a fixed "+44" prefix is
+// shown beside it) — this turns whatever digits someone types (with or
+// without a leading 0, spaces, or even a re-typed +44) into one clean
+// international number before it's saved or emailed anywhere.
+function normalizeUkPhone(local: string): string {
+  let digits = local.replace(/\D/g, "");
+  if (digits.startsWith("44")) digits = digits.slice(2);
+  else if (digits.startsWith("0")) digits = digits.slice(1);
+  return digits ? `+44${digits}` : "";
+}
+
 function dateKey(d: Date): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -139,8 +150,9 @@ export function BookingForm() {
     const next: Errors = {};
 
     if (get("name").length < 2) next.name = "Please enter your name.";
-    if (get("whatsapp").replace(/[^\d]/g, "").length < 10)
-      next.whatsapp = "Please enter a valid WhatsApp number.";
+    const whatsappDigits = get("whatsapp").replace(/\D/g, "").replace(/^44/, "").replace(/^0/, "");
+    if (whatsappDigits.length < 9 || whatsappDigits.length > 10)
+      next.whatsapp = "Please enter a valid UK mobile number.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(get("email")))
       next.email = "Please enter a valid email address.";
 
@@ -175,12 +187,13 @@ export function BookingForm() {
     const requestedEnd = requestedStart
       ? new Date(new Date(requestedStart).getTime() + 30 * 60_000).toISOString()
       : null;
+    const whatsapp = normalizeUkPhone(get("whatsapp"));
 
     try {
       await submitLead({
         name: get("name"),
         email: get("email"),
-        phone: get("whatsapp"),
+        phone: whatsapp,
         business_name: null,
         service_interest: "other",
         message,
@@ -205,7 +218,7 @@ export function BookingForm() {
           data: {
             name: get("name"),
             email: get("email"),
-            phone: get("whatsapp"),
+            phone: whatsapp,
             businessName: null,
             serviceLabel: "General enquiry",
             message,
@@ -254,7 +267,7 @@ export function BookingForm() {
             noValidate
             className="mt-10 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] md:p-8"
           >
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="space-y-5">
               <div>
                 <Label htmlFor="name">Name</Label>
                 <Input id="name" name="name" className={fieldClass} placeholder="Jane Smith" />
@@ -273,13 +286,19 @@ export function BookingForm() {
               </div>
               <div>
                 <Label htmlFor="whatsapp">WhatsApp number</Label>
-                <Input
-                  id="whatsapp"
-                  name="whatsapp"
-                  type="tel"
-                  className={fieldClass}
-                  placeholder="07123 456789"
-                />
+                <div className={cn(fieldClass, "flex overflow-hidden rounded-md border border-input")}>
+                  <span className="flex select-none items-center border-r border-input bg-muted px-3 text-sm font-medium text-muted-foreground">
+                    +44
+                  </span>
+                  <Input
+                    id="whatsapp"
+                    name="whatsapp"
+                    type="tel"
+                    inputMode="tel"
+                    className="rounded-none border-0 shadow-none focus-visible:ring-0"
+                    placeholder="7123 456789"
+                  />
+                </div>
                 {errors.whatsapp && (
                   <p className="mt-1 text-sm text-destructive">{errors.whatsapp}</p>
                 )}

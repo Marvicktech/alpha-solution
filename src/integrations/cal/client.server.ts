@@ -295,7 +295,21 @@ export async function fetchAvailableSlots(input: {
   }
 
   const json = await res.json();
-  return parseSlotsResponse(json);
+  const parsed = parseSlotsResponse(json);
+
+  // Temporary: if parsing found zero slots on every single day in the
+  // window, that's either a real "nothing bookable for 3 weeks" or (more
+  // likely) parseSlotsResponse's assumptions about the response shape don't
+  // match what this endpoint actually returns. Surface the raw shape so we
+  // can tell which, instead of the calendar just quietly showing every day
+  // as unclickable. Remove once confirmed working.
+  const totalSlots = Object.values(parsed).reduce((n, arr) => n + arr.length, 0);
+  if (totalSlots === 0) {
+    const preview = JSON.stringify(json).slice(0, 500);
+    throw new Error(`Cal.com returned no parseable slots. Raw response preview: ${preview}`);
+  }
+
+  return parsed;
 }
 
 // --- Creating a real booking (used once you accept a request) ------------
