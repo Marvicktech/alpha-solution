@@ -167,7 +167,7 @@ export function ServicesPicker({
               Six ways we help UK local businesses get found and get chosen.
             </h2>
             <p className="mt-4 text-on-ink-muted">
-              Choose the closest fit, then pick a time on the calendar below. Not sure? Say so and we'll work it out together on the call.
+              Choose the closest fit, then leave your details below and we'll take it from there. Not sure? Say so and we'll work it out together on the call.
             </p>
           </Reveal>
 
