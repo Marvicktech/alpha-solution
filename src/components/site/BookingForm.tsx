@@ -371,6 +371,14 @@ export function BookingForm() {
                     We couldn't load the live calendar just now — pick your general availability
                     instead and we'll confirm an exact time with you.
                   </p>
+                  {/* Temporary, visible-on-page diagnostic — remove once the
+                      live calendar is confirmed working. Lets us see the
+                      real cause from a plain screenshot, no DevTools needed. */}
+                  {slotsQuery.error instanceof Error && (
+                    <p className="rounded-md bg-destructive/10 p-2 text-[11px] text-destructive">
+                      Debug: {slotsQuery.error.message}
+                    </p>
+                  )}
                 </div>
               )}
 
