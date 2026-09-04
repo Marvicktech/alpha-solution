@@ -10,10 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+import { Calendar as CalendarIcon, Check, Loader2, X } from "lucide-react";
 import {
   STATUS_OPTIONS,
   formatDateTime,
+  formatRequestedSlot,
   serviceLabel,
   sourceLabel,
   type ConsultationRequest,
@@ -32,20 +33,28 @@ export function RequestDetail({
   request,
   onClose,
   onSave,
+  onAccept,
+  onDecline,
 }: {
   request: ConsultationRequest | null;
   onClose: () => void;
   onSave: (id: string, patch: { status?: string; notes?: string | null }) => Promise<void>;
+  onAccept: (request: ConsultationRequest) => Promise<void>;
+  onDecline: (request: ConsultationRequest) => Promise<void>;
 }) {
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [deciding, setDeciding] = useState<"accept" | "decline" | null>(null);
+  const [decisionError, setDecisionError] = useState<string | null>(null);
 
   useEffect(() => {
     setNotes(request?.notes ?? "");
     setSavedAt(null);
     setError(null);
+    setDecisionError(null);
+    setDeciding(null);
   }, [request?.id, request?.notes]);
 
   async function save(patch: { status?: string; notes?: string | null }) {
@@ -61,6 +70,35 @@ export function RequestDetail({
       setSaving(false);
     }
   }
+
+  async function handleAccept() {
+    if (!request) return;
+    setDeciding("accept");
+    setDecisionError(null);
+    try {
+      await onAccept(request);
+    } catch (e) {
+      setDecisionError(e instanceof Error ? e.message : "Couldn't confirm this booking.");
+    } finally {
+      setDeciding(null);
+    }
+  }
+
+  async function handleDecline() {
+    if (!request) return;
+    setDeciding("decline");
+    setDecisionError(null);
+    try {
+      await onDecline(request);
+    } catch (e) {
+      setDecisionError(e instanceof Error ? e.message : "Couldn't send that decline.");
+    } finally {
+      setDeciding(null);
+    }
+  }
+
+  const pending = request && request.status !== "booked" && request.status !== "declined";
+  const requestedSlot = request ? formatRequestedSlot(request) : null;
 
   return (
     <Sheet open={!!request} onOpenChange={(open) => !open && onClose()}>
@@ -90,6 +128,51 @@ export function RequestDetail({
                   {request.message || "—"}
                 </p>
               </div>
+
+              {requestedSlot && (
+                <div className="rounded-xl border border-border bg-muted/40 p-4">
+                  <p className="flex items-center gap-2 text-sm font-semibold">
+                    <CalendarIcon className="size-4 text-primary" aria-hidden="true" />
+                    Requested: {requestedSlot}
+                  </p>
+                  {request.cal_booking_uid && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Confirmed on Cal.com — booking {request.cal_booking_uid}
+                    </p>
+                  )}
+
+                  {pending && (
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                      <Button size="sm" onClick={handleAccept} disabled={deciding !== null}>
+                        {deciding === "accept" ? (
+                          <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
+                        ) : (
+                          <Check className="size-3.5" aria-hidden="true" />
+                        )}
+                        Accept &amp; confirm
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={handleDecline}
+                        disabled={deciding !== null}
+                      >
+                        {deciding === "decline" ? (
+                          <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
+                        ) : (
+                          <X className="size-3.5" aria-hidden="true" />
+                        )}
+                        Decline
+                      </Button>
+                    </div>
+                  )}
+                  {decisionError && (
+                    <p role="alert" className="mt-2 text-sm text-destructive">
+                      {decisionError}
+                    </p>
+                  )}
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label htmlFor="status">Status</Label>

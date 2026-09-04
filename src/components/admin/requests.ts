@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export type RequestStatus = "new" | "contacted" | "booked" | "closed";
+export type RequestStatus = "new" | "contacted" | "booked" | "declined" | "closed";
 
 export type ConsultationRequest = {
   id: string;
@@ -14,14 +14,29 @@ export type ConsultationRequest = {
   source: string;
   status: string;
   notes: string | null;
+  requested_start: string | null;
+  requested_end: string | null;
+  cal_booking_uid: string | null;
 };
 
 export const STATUS_OPTIONS: { value: RequestStatus; label: string }[] = [
   { value: "new", label: "New" },
   { value: "contacted", label: "Contacted" },
   { value: "booked", label: "Booked" },
+  { value: "declined", label: "Declined" },
   { value: "closed", label: "Closed" },
 ];
+
+export function formatRequestedSlot(r: Pick<ConsultationRequest, "requested_start">) {
+  if (!r.requested_start) return null;
+  return new Date(r.requested_start).toLocaleString("en-GB", {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 export const SERVICE_OPTIONS: { value: string; label: string }[] = [
   { value: "website", label: "Website Design & Build" },
@@ -49,6 +64,7 @@ export const STATUS_BADGE: Record<string, string> = {
   new: "bg-primary/15 text-primary border-primary/30",
   contacted: "bg-amber-500/15 text-amber-700 border-amber-500/30",
   booked: "bg-emerald-500/15 text-emerald-700 border-emerald-500/30",
+  declined: "bg-destructive/15 text-destructive border-destructive/30",
   closed: "bg-muted text-muted-foreground border-border",
 };
 
@@ -73,7 +89,7 @@ export async function fetchRequests(): Promise<ConsultationRequest[]> {
 
 export async function updateRequest(
   id: string,
-  patch: { status?: string; notes?: string | null },
+  patch: { status?: string; notes?: string | null; cal_booking_uid?: string | null },
 ) {
   const { error } = await supabase.from("consultation_requests").update(patch).eq("id", id);
   if (error) throw error;

@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { addDays, isAfter, isBefore, startOfDay } from "date-fns";
@@ -106,6 +106,16 @@ export function BookingForm() {
 
   const liveAvailable = !slotsQuery.isError;
   const slotsByDate = slotsQuery.data ?? {};
+
+  // Logged (not just swallowed into the fallback UI) so the real cause —
+  // missing/invalid CAL_API_KEY, a Cal.com API error, a bad response shape —
+  // shows up in the browser console instead of only the generic fallback
+  // message visitors see.
+  useEffect(() => {
+    if (slotsQuery.isError) {
+      console.error("[BookingForm] Live calendar unavailable:", slotsQuery.error);
+    }
+  }, [slotsQuery.isError, slotsQuery.error]);
   const dayFormatter = useMemo(
     () => new Intl.DateTimeFormat("en-GB", { timeZone, weekday: "short", day: "numeric", month: "short" }),
     [timeZone],
@@ -151,14 +161,20 @@ export function BookingForm() {
     setFailed(false);
     track("booking_form_submit", {});
 
+    // Each condition below is repeated in full (rather than hoisted into one
+    // shared boolean) so TypeScript can narrow `selectedDate`/`selectedSlot`
+    // from nullable to definite within each branch.
     const when =
       liveAvailable && selectedDate && selectedSlot
         ? `${dayFormatter.format(selectedDate)}, ${timeFormatter.format(new Date(selectedSlot))} (${timeZone})`
         : `${fallbackDays.join(", ")} · ${fallbackTime}`;
     const note = get("note");
-    const message = `Preferred time: ${when}${
-      liveAvailable && selectedSlot ? `\nSlot: ${selectedSlot}` : ""
-    }${note ? `\n\n${note}` : ""}`;
+    const message = `Preferred time: ${when}${note ? `\n\n${note}` : ""}`;
+    const requestedStart =
+      liveAvailable && selectedDate && selectedSlot ? selectedSlot : null;
+    const requestedEnd = requestedStart
+      ? new Date(new Date(requestedStart).getTime() + 30 * 60_000).toISOString()
+      : null;
 
     try {
       await submitLead({
@@ -169,10 +185,12 @@ export function BookingForm() {
         service_interest: "other",
         message,
         source: "booking_form",
+        requested_start: requestedStart,
+        requested_end: requestedEnd,
       });
       setSubmitted(true);
       track("booking_form_success", {});
-      toast.success("Thanks! We'll be in touch within 1 business day.");
+      toast.success("Thanks! We'll confirm your time shortly.");
       form.reset();
       setSelectedDate(undefined);
       setSelectedSlot(null);
@@ -192,6 +210,7 @@ export function BookingForm() {
             serviceLabel: "General enquiry",
             message,
             source: "booking_form",
+            requestedWhen: when,
           },
         });
       } catch (emailErr) {
@@ -388,8 +407,8 @@ export function BookingForm() {
               {submitted && (
                 <p className="mt-4 flex items-start gap-2 rounded-xl border border-primary/30 bg-primary/10 p-4 text-sm font-semibold text-foreground">
                   <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden="true" />
-                  Thanks! Your request is in — we'll WhatsApp or email you within 1 business day to
-                  confirm a time.
+                  Thanks! Your requested time is in — we'll email you a confirmation (or the
+                  nearest alternative) within 1 business day.
                 </p>
               )}
               {failed && (

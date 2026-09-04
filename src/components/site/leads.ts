@@ -22,6 +22,8 @@ export type LeadInput = {
   service_interest: string;
   message?: string | null;
   source: "booking_form" | "live_person_request";
+  requested_start?: string | null;
+  requested_end?: string | null;
 };
 
 export async function submitLead(input: LeadInput) {

@@ -253,3 +253,54 @@ export async function fetchAvailableSlots(input: {
   const json = await res.json();
   return parseSlotsResponse(json);
 }
+
+// --- Creating a real booking (used once you accept a request) ------------
+// This is the step that actually reserves the slot on Cal.com — everything
+// before this (the visitor's form submission) is just a request sitting in
+// Supabase. Only call this from the admin "Accept" action.
+
+type CalCreatedBooking = {
+  id: number;
+  uid: string;
+  status: string;
+  start: string;
+  end: string;
+};
+
+type CalCreateBookingResponse = { status: "success" | "error"; data: CalCreatedBooking };
+
+export async function createCalBooking(input: {
+  start: string;
+  attendee: { name: string; email: string; timeZone?: string };
+}): Promise<CalCreatedBooking> {
+  const apiKey = getCalApiKey();
+  const res = await fetch(`${CAL_API_BASE}/bookings`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "cal-api-version": CAL_API_VERSION,
+    },
+    body: JSON.stringify({
+      start: input.start,
+      attendee: {
+        name: input.attendee.name,
+        email: input.attendee.email,
+        timeZone: input.attendee.timeZone || "Europe/London",
+      },
+      eventTypeSlug: CAL_EVENT_TYPE_SLUG,
+      username: CAL_USERNAME,
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Cal.com API error (${res.status}): ${body || res.statusText}`);
+  }
+
+  const json = (await res.json()) as CalCreateBookingResponse;
+  if (json.status !== "success") {
+    throw new Error("Cal.com API returned an error response.");
+  }
+  return json.data;
+}

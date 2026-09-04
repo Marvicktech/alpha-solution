@@ -22,7 +22,11 @@ function wrap(bodyHtml: string): string {
   `;
 }
 
-export function leadConfirmationEmail(input: { name: string; serviceLabel: string }): {
+export function leadConfirmationEmail(input: {
+  name: string;
+  serviceLabel: string;
+  requestedWhen?: string | null;
+}): {
   subject: string;
   html: string;
 } {
@@ -31,12 +35,60 @@ export function leadConfirmationEmail(input: { name: string; serviceLabel: strin
     html: wrap(`
       <p style="margin:0 0 16px;">Hi ${input.name},</p>
       <p style="margin:0 0 16px;">
-        Thanks for reaching out about <strong>${input.serviceLabel}</strong>. Your request is in and
-        we'll be in touch within one business day.
+        Thanks for reaching out about <strong>${input.serviceLabel}</strong>.
+        ${
+          input.requestedWhen
+            ? `You requested <strong>${input.requestedWhen}</strong> — we're reviewing that now and
+               will confirm it (or suggest the nearest alternative) within one business day.`
+            : `Your request is in and we'll be in touch within one business day.`
+        }
+      </p>
+      <p style="margin:0;">— The Alpha Presence team</p>
+    `),
+  };
+}
+
+export function bookingConfirmedEmail(input: { name: string; start: string; timeZone: string }): {
+  subject: string;
+  html: string;
+} {
+  const when = new Intl.DateTimeFormat("en-GB", {
+    timeZone: input.timeZone,
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(input.start));
+
+  return {
+    subject: "You're confirmed — Alpha Presence",
+    html: wrap(`
+      <p style="margin:0 0 16px;">Hi ${input.name},</p>
+      <p style="margin:0 0 16px;">
+        You're confirmed for <strong>${when} (${input.timeZone})</strong>. It's on our calendar —
+        you'll also get a separate calendar invite with the call link.
       </p>
       <p style="margin:0 0 16px;">
-        Prefer not to wait? You can also pick a time directly on our calendar any time:
-        <a href="https://cal.com/alphapresenced/30min" style="color:${BRAND_RED};font-weight:600;">Book a call now</a>.
+        Need to change it? Just reply to this email and we'll sort out a new time.
+      </p>
+      <p style="margin:0;">— The Alpha Presence team</p>
+    `),
+  };
+}
+
+export function bookingDeclinedEmail(input: { name: string }): {
+  subject: string;
+  html: string;
+} {
+  return {
+    subject: "Let's find you a better time — Alpha Presence",
+    html: wrap(`
+      <p style="margin:0 0 16px;">Hi ${input.name},</p>
+      <p style="margin:0 0 16px;">
+        That time doesn't quite work on our end — sorry about that. Could you reply here with a
+        couple of other times that suit you, or head back to the site and pick a new slot? We'll
+        get you booked in properly.
       </p>
       <p style="margin:0;">— The Alpha Presence team</p>
     `),
@@ -88,6 +140,10 @@ export function statusUpdateEmail(input: { name: string; status: string }): {
     booked: {
       subject: "You're booked in — Alpha Presence",
       body: "You're booked in for your consultation. If anything changes on our end (including a reschedule), we'll email you straight away.",
+    },
+    declined: {
+      subject: "Let's find you a better time — Alpha Presence",
+      body: "That time doesn't quite work on our end — reply here with a couple of other times and we'll get you booked in.",
     },
     closed: {
       subject: "Update on your request — Alpha Presence",

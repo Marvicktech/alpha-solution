@@ -33,6 +33,7 @@ import {
   type ConsultationRequest,
 } from "./requests";
 import { notifyStatusChange } from "./notifications.functions";
+import { acceptBookingRequest, declineBookingRequest } from "./bookingActions.functions";
 
 function Stat({ label, value }: { label: string; value: number | string }) {
   return (
@@ -46,6 +47,8 @@ function Stat({ label, value }: { label: string; value: number | string }) {
 export function RequestsDashboard() {
   const queryClient = useQueryClient();
   const sendStatusChangeEmail = useServerFn(notifyStatusChange);
+  const acceptRequest = useServerFn(acceptBookingRequest);
+  const declineRequest = useServerFn(declineBookingRequest);
   const [status, setStatus] = useState("all");
   const [service, setService] = useState("all");
   const [search, setSearch] = useState("");
@@ -57,8 +60,13 @@ export function RequestsDashboard() {
   });
 
   const mutation = useMutation({
-    mutationFn: ({ id, patch }: { id: string; patch: { status?: string; notes?: string | null } }) =>
-      updateRequest(id, patch),
+    mutationFn: ({
+      id,
+      patch,
+    }: {
+      id: string;
+      patch: { status?: string; notes?: string | null; cal_booking_uid?: string | null };
+    }) => updateRequest(id, patch),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["consultation_requests"] }),
   });
 
@@ -228,6 +236,31 @@ export function RequestsDashboard() {
               console.error("[RequestsDashboard] notifyStatusChange failed:", e);
             }
           }
+        }}
+        onAccept={async (request) => {
+          if (!request.requested_start) {
+            throw new Error("No requested time on this request — use the status dropdown instead.");
+          }
+          // Create the real Cal.com booking (and email the confirmed time)
+          // FIRST — only mark this "booked" in Supabase once that succeeds,
+          // so a Cal.com failure never leaves a request looking confirmed
+          // when no meeting actually exists.
+          const result = await acceptRequest({
+            data: {
+              name: request.name,
+              email: request.email,
+              start: request.requested_start,
+              timeZone: "Europe/London",
+            },
+          });
+          await mutation.mutateAsync({
+            id: request.id,
+            patch: { status: "booked", cal_booking_uid: result.uid },
+          });
+        }}
+        onDecline={async (request) => {
+          await declineRequest({ data: { name: request.name, email: request.email } });
+          await mutation.mutateAsync({ id: request.id, patch: { status: "declined" } });
         }}
       />
     </div>

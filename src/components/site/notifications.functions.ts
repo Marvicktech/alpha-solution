@@ -14,6 +14,7 @@ export const notifyNewLead = createServerFn({ method: "POST" })
       serviceLabel: string;
       message?: string | null;
       source: string;
+      requestedWhen?: string | null;
     }) => input,
   )
   .handler(async ({ data }): Promise<void> => {
@@ -27,7 +28,11 @@ export const notifyNewLead = createServerFn({ method: "POST" })
     const results = await Promise.allSettled([
       sendEmail({
         to: { address: data.email, name: data.name },
-        ...leadConfirmationEmail({ name: data.name, serviceLabel: data.serviceLabel }),
+        ...leadConfirmationEmail({
+          name: data.name,
+          serviceLabel: data.serviceLabel,
+          requestedWhen: data.requestedWhen,
+        }),
       }),
       sendEmail({
         to: { address: "info@alphapresence.studio", name: "Alpha Presence" },
