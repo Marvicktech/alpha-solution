@@ -232,7 +232,13 @@ export async function fetchAvailableSlots(input: {
   endTime: string;
   timeZone?: string;
 }): Promise<CalSlotsByDate> {
-  const apiKey = getCalApiKey();
+  // Deliberately unauthenticated: this is the same public lookup an
+  // anonymous visitor's browser makes on your real cal.com/alphapresenced/30min
+  // page before they've signed in to anything. Sending our personal API key
+  // here made Cal.com resolve the request in an authenticated context (your
+  // own account's org/team scope) instead of the plain public one, and it
+  // couldn't find "alphapresenced" there — hence the 404 NOT_FOUND. Dropping
+  // the Authorization header matches how the real booking page calls it.
   const search = new URLSearchParams({
     startTime: input.startTime,
     endTime: input.endTime,
@@ -241,9 +247,7 @@ export async function fetchAvailableSlots(input: {
   });
   if (input.timeZone) search.set("timeZone", input.timeZone);
 
-  const res = await fetch(`${CAL_API_BASE}/slots/available?${search.toString()}`, {
-    headers: { Authorization: `Bearer ${apiKey}` },
-  });
+  const res = await fetch(`${CAL_API_BASE}/slots/available?${search.toString()}`);
 
   if (!res.ok) {
     const body = await res.text().catch(() => "");
