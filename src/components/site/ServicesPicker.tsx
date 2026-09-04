@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Check, MessageCircle, Phone, ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,11 +10,13 @@ import { Reveal } from "./Reveal";
 import workstationPhoto from "@/assets/services-workstation.jpg";
 import { SERVICES, SERVICE_TABLE, type ServiceId } from "./data";
 import { submitLead } from "./leads";
+import { notifyNewLead } from "./notifications.functions";
 import { SITE } from "@/config/site";
 
 function QuickContact() {
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  const sendNewLeadEmails = useServerFn(notifyNewLead);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -35,10 +38,11 @@ function QuickContact() {
     }
     setError(null);
     setStatus("sending");
+    const finalEmail = emailOk ? email : "not-provided@alphapresence.invalid";
     try {
       await submitLead({
         name,
-        email: emailOk ? email : "not-provided@alphapresence.invalid",
+        email: finalEmail,
         phone: phoneOk ? phone : null,
         service_interest: "other",
         source: "live_person_request",
@@ -47,6 +51,24 @@ function QuickContact() {
       setStatus("done");
       toast.success("Thanks! We'll be in touch within 1 business day.");
       form.reset();
+
+      if (emailOk) {
+        try {
+          await sendNewLeadEmails({
+            data: {
+              name,
+              email: finalEmail,
+              phone: phoneOk ? phone : null,
+              businessName: null,
+              serviceLabel: "General enquiry",
+              message: "Requested a call back from the talk-to-a-real-person panel.",
+              source: "live_person_request",
+            },
+          });
+        } catch (emailErr) {
+          console.error("[QuickContact] notifyNewLead failed:", emailErr);
+        }
+      }
     } catch {
       setStatus("error");
       toast.error("Couldn't send that. Please try again in a moment.");
@@ -145,7 +167,7 @@ export function ServicesPicker({
               Six ways we help UK local businesses get found and get chosen.
             </h2>
             <p className="mt-4 text-on-ink-muted">
-              Choose the closest fit and the consultation form below fills itself in. Not sure? Say so and we'll work it out together on the call.
+              Choose the closest fit, then pick a time on the calendar below. Not sure? Say so and we'll work it out together on the call.
             </p>
           </Reveal>
 

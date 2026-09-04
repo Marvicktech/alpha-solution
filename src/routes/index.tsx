@@ -201,7 +201,7 @@ function Index() {
         <Mission />
         <Problems />
         <ServicesPicker selected={selected} onSelect={handleSelect} showHuman={showHuman} />
-        <BookingForm service={selected} onServiceChange={(id) => setSelected(id)} />
+        <BookingForm />
         <Testimonial />
         <WhereYoullShowUp />
         <Work />

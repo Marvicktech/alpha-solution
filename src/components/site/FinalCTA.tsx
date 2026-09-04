@@ -1,7 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "./Reveal";
-import { BookACallButton } from "./BookACallButton";
 import { track } from "@/lib/analytics";
 
 export function FinalCTA({ onBook }: { onBook: () => void }) {
@@ -13,7 +12,7 @@ export function FinalCTA({ onBook }: { onBook: () => void }) {
           <h2 className="display-1 font-extrabold text-balance text-on-ink">
             Your customers are already looking. Let's make sure they find you.
           </h2>
-          <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+          <div className="mt-10 flex justify-center">
             <Button
               variant="hero"
               size="xl"
@@ -26,9 +25,6 @@ export function FinalCTA({ onBook }: { onBook: () => void }) {
               Book a free consultation
               <ArrowRight aria-hidden="true" />
             </Button>
-            <BookACallButton location="final_cta" variant="glass" size="xl">
-              Or book instantly
-            </BookACallButton>
           </div>
         </Reveal>
       </div>
