@@ -204,7 +204,14 @@ function parseSlotsResponse(json: unknown): CalSlotsByDate {
   }
 
   const body = (json && typeof json === "object" ? json : {}) as Record<string, unknown>;
-  const data = body["data"] ?? body["slots"] ?? body;
+  let data: unknown = body["data"] ?? body["slots"] ?? body;
+  // The real response nests the date-keyed map one level deeper than the
+  // docs describe: { data: { slots: { "2026-09-05": [...] } } }, not
+  // { data: { "2026-09-05": [...] } }. Unwrap that extra "slots" layer
+  // when present, while still accepting the flatter documented shape.
+  if (data && typeof data === "object" && !Array.isArray(data) && "slots" in (data as Record<string, unknown>)) {
+    data = (data as Record<string, unknown>)["slots"];
+  }
 
   if (Array.isArray(data)) {
     for (const raw of data) {
@@ -295,21 +302,7 @@ export async function fetchAvailableSlots(input: {
   }
 
   const json = await res.json();
-  const parsed = parseSlotsResponse(json);
-
-  // Temporary: if parsing found zero slots on every single day in the
-  // window, that's either a real "nothing bookable for 3 weeks" or (more
-  // likely) parseSlotsResponse's assumptions about the response shape don't
-  // match what this endpoint actually returns. Surface the raw shape so we
-  // can tell which, instead of the calendar just quietly showing every day
-  // as unclickable. Remove once confirmed working.
-  const totalSlots = Object.values(parsed).reduce((n, arr) => n + arr.length, 0);
-  if (totalSlots === 0) {
-    const preview = JSON.stringify(json).slice(0, 500);
-    throw new Error(`Cal.com returned no parseable slots. Raw response preview: ${preview}`);
-  }
-
-  return parsed;
+  return parseSlotsResponse(json);
 }
 
 // --- Creating a real booking (used once you accept a request) ------------
