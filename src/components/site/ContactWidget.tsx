@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MessageCircle, X, CalendarCheck, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BookACallButton } from "./BookACallButton";
 import { SITE } from "@/config/site";
 import { track } from "@/lib/analytics";
 
@@ -39,6 +40,14 @@ export function ContactWidget({ onBook }: { onBook: () => void }) {
               <CalendarCheck aria-hidden="true" />
               Book a free consultation
             </Button>
+            <BookACallButton
+              location="contact_widget"
+              variant="outline"
+              size="default"
+              className="w-full justify-start"
+            >
+              Or pick a time on my calendar
+            </BookACallButton>
             {SITE.email && (
               <Button variant="outline" className="w-full justify-start" asChild>
                 <a href={`mailto:${SITE.email}`}>

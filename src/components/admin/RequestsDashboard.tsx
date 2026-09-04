@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -31,6 +32,7 @@ import {
   updateRequest,
   type ConsultationRequest,
 } from "./requests";
+import { notifyStatusChange } from "./notifications.functions";
 
 function Stat({ label, value }: { label: string; value: number | string }) {
   return (
@@ -43,6 +45,7 @@ function Stat({ label, value }: { label: string; value: number | string }) {
 
 export function RequestsDashboard() {
   const queryClient = useQueryClient();
+  const sendStatusChangeEmail = useServerFn(notifyStatusChange);
   const [status, setStatus] = useState("all");
   const [service, setService] = useState("all");
   const [search, setSearch] = useState("");
@@ -214,6 +217,17 @@ export function RequestsDashboard() {
         onClose={() => setSelectedId(null)}
         onSave={async (id, patch) => {
           await mutation.mutateAsync({ id, patch });
+          // Only status changes get an email out to the client — saving
+          // internal notes shouldn't notify them.
+          if (patch.status && selected) {
+            try {
+              await sendStatusChangeEmail({
+                data: { name: selected.name, email: selected.email, status: patch.status },
+              });
+            } catch (e) {
+              console.error("[RequestsDashboard] notifyStatusChange failed:", e);
+            }
+          }
         }}
       />
     </div>

@@ -10,7 +10,7 @@ export const SITE = {
   positioning:
     "Alpha Presence: plain-English digital help for UK local businesses.",
   /** e.g. "hello@alphapresence.studio" */
-  email: "",
+  email: "info@alphapresence.studio",
   /** Display format, e.g. "020 7946 0000" */
   phone: "",
   /** Tel href format, e.g. "+442079460000" */

@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { CalendarCheck, CheckCircle2, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,9 +8,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Reveal } from "./Reveal";
 import { ConsultationPreview } from "./ConsultationPreview";
+import { BookACallButton } from "./BookACallButton";
 import contactBanner from "@/assets/book-contact-banner.jpg";
 import { SERVICE_LABELS, type ServiceId } from "./data";
 import { submitLead, toDbService } from "./leads";
+import { notifyNewLead } from "./notifications.functions";
 import { track } from "@/lib/analytics";
 
 type Errors = Partial<Record<"name" | "email" | "phone" | "business" | "message", string>>;
@@ -27,6 +30,7 @@ export function BookingForm({
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [failed, setFailed] = useState(false);
+  const sendNewLeadEmails = useServerFn(notifyNewLead);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -52,13 +56,14 @@ export function BookingForm({
     setSubmitting(true);
     setFailed(false);
     track("booking_form_submit", { service: get("service") || service || "unspecified" });
+    const resolvedService = (get("service") as ServiceId) || service;
     try {
       await submitLead({
         name: get("name"),
         email: get("email"),
         phone: get("phone") || null,
         business_name: get("business") || null,
-        service_interest: toDbService((get("service") as ServiceId) || service),
+        service_interest: toDbService(resolvedService),
         message: get("message") || null,
         source: "booking_form",
       });
@@ -66,6 +71,25 @@ export function BookingForm({
       track("booking_form_success", { service: get("service") || service || "unspecified" });
       toast.success("Thanks! We'll be in touch within 1 business day.");
       form.reset();
+
+      // Confirmation + notification emails. The lead is already saved above,
+      // so a hiccup here shouldn't turn a successful submission into an
+      // error the visitor sees.
+      try {
+        await sendNewLeadEmails({
+          data: {
+            name: get("name"),
+            email: get("email"),
+            phone: get("phone") || null,
+            businessName: get("business") || null,
+            serviceLabel: resolvedService ? SERVICE_LABELS[resolvedService] : "General enquiry",
+            message: get("message") || null,
+            source: "booking_form",
+          },
+        });
+      } catch (emailErr) {
+        console.error("[BookingForm] notifyNewLead failed:", emailErr);
+      }
     } catch (err) {
       // Logged so the real cause (RLS, network, etc.) shows up in the browser
       // console instead of only the generic toast below.
@@ -111,6 +135,18 @@ export function BookingForm({
         </Reveal>
 
         <ConsultationPreview />
+
+        <Reveal delay={80} className="mt-8 flex items-center justify-center gap-3">
+          <BookACallButton location="booking_section" variant="outline" size="lg">
+            Skip the form — pick a time directly
+          </BookACallButton>
+        </Reveal>
+
+        <div className="mt-8 flex items-center gap-4 text-xs font-medium tracking-wide text-muted-foreground">
+          <span className="h-px flex-1 bg-border" aria-hidden="true" />
+          OR TELL US A BIT MORE FIRST
+          <span className="h-px flex-1 bg-border" aria-hidden="true" />
+        </div>
 
         <Reveal delay={100}>
           <form

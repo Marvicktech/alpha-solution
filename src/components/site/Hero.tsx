@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "./Reveal";
 import { CountUp } from "./CountUp";
+import { BookACallButton } from "./BookACallButton";
 import { track } from "@/lib/analytics";
 import heroPhoto from "@/assets/hero-photo-2.jpg";
 
@@ -139,6 +140,16 @@ export function Hero({ onBook }: { onBook: () => void }) {
           <p className="mt-5 text-xs text-on-ink-muted sm:text-sm">
             Fixed scope and price agreed before work starts. No retainers you cannot exit.
           </p>
+
+          <BookACallButton
+            location="hero_secondary"
+            variant="link"
+            size="default"
+            className="mt-2 h-auto p-0 text-on-ink-muted hover:text-on-ink"
+          >
+            Or see my live calendar & book instantly
+            <ArrowRight className="size-3.5" aria-hidden="true" />
+          </BookACallButton>
         </Reveal>
 
         <Reveal delay={240}>
