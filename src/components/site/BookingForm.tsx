@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { CalendarCheck, CheckCircle2, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import { Reveal } from "./Reveal";
 import { submitLead } from "./leads";
 import { notifyNewLead } from "./notifications.functions";
@@ -13,12 +14,47 @@ import { track } from "@/lib/analytics";
 
 type Errors = Partial<Record<"name" | "whatsapp" | "email" | "when", string>>;
 
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
+const TIMES_OF_DAY = ["Morning", "Afternoon", "Evening", "Anytime"] as const;
+
+function Chip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={cn(
+        "rounded-full border px-4 py-2 text-sm font-semibold transition-all",
+        active
+          ? "border-primary bg-primary text-primary-foreground shadow-[var(--shadow-glow)]"
+          : "border-input bg-background text-foreground hover:border-primary/50 hover:bg-accent",
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
 export function BookingForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [days, setDays] = useState<string[]>([]);
+  const [timeOfDay, setTimeOfDay] = useState<string | null>(null);
   const sendNewLeadEmails = useServerFn(notifyNewLead);
+
+  function toggleDay(day: string) {
+    setDays((d) => (d.includes(day) ? d.filter((x) => x !== day) : [...d, day]));
+  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -32,7 +68,8 @@ export function BookingForm() {
       next.whatsapp = "Please enter a valid WhatsApp number.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(get("email")))
       next.email = "Please enter a valid email address.";
-    if (get("when").length < 2) next.when = "Let us know roughly when works for you.";
+    if (days.length === 0 || !timeOfDay)
+      next.when = "Pick at least one day and a time of day that works for you.";
 
     setErrors(next);
     if (Object.keys(next).length > 0) {
@@ -44,8 +81,9 @@ export function BookingForm() {
     setFailed(false);
     track("booking_form_submit", {});
 
+    const when = `${days.join(", ")} · ${timeOfDay}`;
     const note = get("note");
-    const message = `Preferred time: ${get("when")}${note ? `\n\n${note}` : ""}`;
+    const message = `Preferred time: ${when}${note ? `\n\n${note}` : ""}`;
 
     try {
       await submitLead({
@@ -61,6 +99,8 @@ export function BookingForm() {
       track("booking_form_success", {});
       toast.success("Thanks! We'll be in touch within 1 business day.");
       form.reset();
+      setDays([]);
+      setTimeOfDay(null);
 
       // Confirmation + notification emails. The lead is already saved above,
       // so a hiccup here shouldn't turn a successful submission into an
@@ -148,16 +188,25 @@ export function BookingForm() {
                   <p className="mt-1 text-sm text-destructive">{errors.whatsapp}</p>
                 )}
               </div>
-              <div>
-                <Label htmlFor="when">Best time to reach you</Label>
-                <Input
-                  id="when"
-                  name="when"
-                  className={fieldClass}
-                  placeholder="e.g. Weekday mornings, or Tue 3pm"
-                />
-                {errors.when && <p className="mt-1 text-sm text-destructive">{errors.when}</p>}
+            </div>
+
+            <div className="mt-5">
+              <Label>Best time to reach you</Label>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {DAYS.map((day) => (
+                  <Chip key={day} active={days.includes(day)} onClick={() => toggleDay(day)}>
+                    {day}
+                  </Chip>
+                ))}
               </div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {TIMES_OF_DAY.map((t) => (
+                  <Chip key={t} active={timeOfDay === t} onClick={() => setTimeOfDay(t)}>
+                    {t}
+                  </Chip>
+                ))}
+              </div>
+              {errors.when && <p className="mt-2 text-sm text-destructive">{errors.when}</p>}
             </div>
 
             <div className="mt-5">
