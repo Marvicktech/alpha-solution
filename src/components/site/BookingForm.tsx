@@ -20,8 +20,11 @@ type Errors = Partial<Record<"name" | "whatsapp" | "email" | "when", string>>;
 
 // How far ahead visitors can book. Kept modest — Cal.com bookings this far
 // out are rare for a 30-minute consult, and a shorter window keeps the
-// slots request (and the calendar's disabled-day pass) cheap.
-const DAYS_AHEAD = 21;
+// slots request (and the calendar's disabled-day pass) cheap. The calendar
+// below is also capped to this same window (via startMonth/endMonth) so
+// browsing to a later month never lands on a wall of greyed-out days with
+// no data behind them — it looks like the site "broke" past this point.
+const DAYS_AHEAD = 30;
 
 // The WhatsApp field only collects the local part (a fixed "+44" prefix is
 // shown beside it) — this turns whatever digits someone types (with or
@@ -319,6 +322,12 @@ export function BookingForm() {
                           setSelectedDate(d);
                           setSelectedSlot(null);
                         }}
+                        // Bounds which months the visitor can even navigate
+                        // to — without this, "next month" past the fetched
+                        // window shows every day disabled, which reads as
+                        // broken rather than "not available to book yet".
+                        startMonth={rangeStart}
+                        endMonth={rangeEnd}
                         disabled={(date) => {
                           if (isBefore(startOfDay(date), rangeStart)) return true;
                           if (isAfter(date, rangeEnd)) return true;
