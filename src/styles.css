@@ -295,12 +295,14 @@
   border: 1.5px solid color-mix(in oklab, var(--primary-glow) 70%, transparent);
   background: color-mix(in oklab, var(--primary) 8%, transparent);
   box-shadow: 0 0 8px 1px color-mix(in oklab, var(--primary-glow) 25%, transparent);
+  /* opacity/border-color only — width, height and box-shadow all force a
+     repaint (and width/height force layout too), so easing those on every
+     hover/press state change is the same non-composited-animation pattern
+     Lighthouse flags, just triggered by interaction instead of a loop. The
+     size/glow change now happens instantly instead of easing in. */
   transition:
     opacity 0.2s ease,
-    width 0.2s ease,
-    height 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    border-color 0.2s ease;
 }
 
 .cursor-ring--active {
