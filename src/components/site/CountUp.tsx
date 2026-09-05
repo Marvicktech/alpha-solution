@@ -48,8 +48,17 @@ export function CountUp({ value, duration = 1200 }: { value: string; duration?: 
 
   const rendered = value.replace(/\d+/g, (n) => String(Math.round(Number(n) * progress)));
 
+  // A plain <span> has no ARIA role of its own (implicitly "generic"), and
+  // the "generic" role explicitly prohibits naming attributes like
+  // aria-label — that's exactly what PageSpeed Insights' "prohibited ARIA
+  // attributes" finding was flagging on every one of these stats.
+  // `role="img"` is the standard, widely-used fix for this "let the label
+  // override formatted/animating visual text" pattern: role="img" is one of
+  // the few roles whose whole purpose is to be named by aria-label, so a
+  // screen reader reads the real value (e.g. "1 in 5") instead of whatever
+  // the counting animation currently shows on screen.
   return (
-    <span ref={ref} aria-label={value}>
+    <span ref={ref} role="img" aria-label={value}>
       <span aria-hidden="true">{rendered}</span>
     </span>
   );
