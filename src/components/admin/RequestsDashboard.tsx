@@ -251,6 +251,7 @@ export function RequestsDashboard() {
               email: request.email,
               start: request.requested_start,
               timeZone: "Europe/London",
+              notes: request.message || undefined,
             },
           });
           await mutation.mutateAsync({

@@ -323,6 +323,11 @@ type CalCreateBookingResponse = { status: "success" | "error"; data: CalCreatedB
 export async function createCalBooking(input: {
   start: string;
   attendee: { name: string; email: string; timeZone?: string };
+  // The visitor's stated challenge (and anything else from the intake form
+  // worth keeping on the booking itself) — attached via Cal.com's
+  // bookingFieldsResponses so it shows up on the booking in Cal.com too, the
+  // same way the ONOMZ build passes its "Service Requested" field through.
+  notes?: string;
 }): Promise<CalCreatedBooking> {
   const apiKey = getCalApiKey();
   // Use the resolved numeric id rather than eventTypeSlug+username — this
@@ -345,6 +350,7 @@ export async function createCalBooking(input: {
         timeZone: input.attendee.timeZone || "Europe/London",
       },
       eventTypeId,
+      ...(input.notes ? { bookingFieldsResponses: { notes: input.notes } } : {}),
     }),
   });
 

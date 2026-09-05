@@ -16,7 +16,9 @@ import { notifyNewLead } from "./notifications.functions";
 import { getAvailableSlots } from "./availability.functions";
 import { track } from "@/lib/analytics";
 
-type Errors = Partial<Record<"name" | "whatsapp" | "email" | "when", string>>;
+type Errors = Partial<Record<"name" | "whatsapp" | "email" | "when" | "challenge", string>>;
+
+const HEARD_VIA_OPTIONS = ["Referral", "Search", "Social", "Other"] as const;
 
 // How far ahead visitors can book. Kept modest — Cal.com bookings this far
 // out are rare for a 30-minute consult, and a shorter window keeps the
@@ -90,6 +92,8 @@ export function BookingForm() {
   const [fallbackDays, setFallbackDays] = useState<string[]>([]);
   const [fallbackTime, setFallbackTime] = useState<string | null>(null);
 
+  const [heardVia, setHeardVia] = useState<string | null>(null);
+
   const sendNewLeadEmails = useServerFn(notifyNewLead);
   const fetchSlots = useServerFn(getAvailableSlots);
 
@@ -158,6 +162,8 @@ export function BookingForm() {
       next.whatsapp = "Please enter a valid UK mobile number.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(get("email")))
       next.email = "Please enter a valid email address.";
+    if (get("challenge").length < 10)
+      next.challenge = "Tell us a bit about what you're trying to solve.";
 
     if (liveAvailable) {
       if (!selectedDate || !selectedSlot)
@@ -183,8 +189,10 @@ export function BookingForm() {
       liveAvailable && selectedDate && selectedSlot
         ? `${dayFormatter.format(selectedDate)}, ${timeFormatter.format(new Date(selectedSlot))} (${timeZone})`
         : `${fallbackDays.join(", ")} · ${fallbackTime}`;
-    const note = get("note");
-    const message = `Preferred time: ${when}${note ? `\n\n${note}` : ""}`;
+    const challenge = get("challenge");
+    const message = [challenge, heardVia ? `Heard about us via: ${heardVia}` : null]
+      .filter(Boolean)
+      .join("\n\n");
     const requestedStart =
       liveAvailable && selectedDate && selectedSlot ? selectedSlot : null;
     const requestedEnd = requestedStart
@@ -197,7 +205,7 @@ export function BookingForm() {
         name: get("name"),
         email: get("email"),
         phone: whatsapp,
-        business_name: null,
+        business_name: get("company") || null,
         service_interest: "other",
         message,
         source: "booking_form",
@@ -222,7 +230,7 @@ export function BookingForm() {
             name: get("name"),
             email: get("email"),
             phone: whatsapp,
-            businessName: null,
+            businessName: get("company") || null,
             serviceLabel: "General enquiry",
             message,
             source: "booking_form",
@@ -305,6 +313,15 @@ export function BookingForm() {
                 {errors.whatsapp && (
                   <p className="mt-1 text-sm text-destructive">{errors.whatsapp}</p>
                 )}
+              </div>
+              <div>
+                <Label htmlFor="company">Company name (optional)</Label>
+                <Input
+                  id="company"
+                  name="company"
+                  className={fieldClass}
+                  placeholder="Your business name"
+                />
               </div>
             </div>
 
@@ -406,14 +423,32 @@ export function BookingForm() {
             </div>
 
             <div className="mt-5">
-              <Label htmlFor="note">Anything else? (optional)</Label>
+              <Label htmlFor="challenge">What's the main challenge you're trying to solve?</Label>
               <Textarea
-                id="note"
-                name="note"
+                id="challenge"
+                name="challenge"
                 rows={4}
                 className={fieldClass}
-                placeholder="What's going on, and what would a good outcome look like?"
+                placeholder="e.g. our site looks dated and we're not getting enquiries from it"
               />
+              {errors.challenge && (
+                <p className="mt-1 text-sm text-destructive">{errors.challenge}</p>
+              )}
+            </div>
+
+            <div className="mt-5">
+              <Label>How did you hear about us? (optional)</Label>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {HEARD_VIA_OPTIONS.map((option) => (
+                  <Chip
+                    key={option}
+                    active={heardVia === option}
+                    onClick={() => setHeardVia((v) => (v === option ? null : option))}
+                  >
+                    {option}
+                  </Chip>
+                ))}
+              </div>
             </div>
 
             <Button

@@ -11,13 +11,23 @@ import { createServerFn } from "@tanstack/react-start";
 
 export const acceptBookingRequest = createServerFn({ method: "POST" })
   .validator(
-    (input: { name: string; email: string; start: string; timeZone?: string }) => input,
+    (input: {
+      name: string;
+      email: string;
+      start: string;
+      timeZone?: string;
+      // The visitor's stated challenge from the intake form — attached to
+      // the Cal.com booking itself and restated in the confirmation email
+      // so it reads as a personal reply, not a generic auto-confirm.
+      notes?: string;
+    }) => input,
   )
   .handler(async ({ data }): Promise<{ uid: string; start: string; end: string }> => {
     const { createCalBooking } = await import("@/integrations/cal/client.server");
     const booking = await createCalBooking({
       start: data.start,
       attendee: { name: data.name, email: data.email, timeZone: data.timeZone },
+      notes: data.notes,
     });
 
     const { sendEmail } = await import("@/integrations/email/client.server");
@@ -28,6 +38,7 @@ export const acceptBookingRequest = createServerFn({ method: "POST" })
         name: data.name,
         start: booking.start,
         timeZone: data.timeZone || "Europe/London",
+        challenge: data.notes,
       }),
     });
 

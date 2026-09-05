@@ -32,6 +32,7 @@ export const notifyNewLead = createServerFn({ method: "POST" })
           name: data.name,
           serviceLabel: data.serviceLabel,
           requestedWhen: data.requestedWhen,
+          challenge: data.message,
         }),
       }),
       sendEmail({

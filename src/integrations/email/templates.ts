@@ -26,6 +26,7 @@ export function leadConfirmationEmail(input: {
   name: string;
   serviceLabel: string;
   requestedWhen?: string | null;
+  challenge?: string | null;
 }): {
   subject: string;
   html: string;
@@ -43,12 +44,23 @@ export function leadConfirmationEmail(input: {
             : `Your request is in and we'll be in touch within one business day.`
         }
       </p>
+      ${
+        input.challenge
+          ? `<p style="margin:0 0 16px;">Here's what you told us, so we come prepared:</p>
+             <p style="margin:0 0 16px;padding:12px;background:#f7f7f7;border-radius:8px;white-space:pre-wrap;">${input.challenge}</p>`
+          : ""
+      }
       <p style="margin:0;">— The Alpha Presence team</p>
     `),
   };
 }
 
-export function bookingConfirmedEmail(input: { name: string; start: string; timeZone: string }): {
+export function bookingConfirmedEmail(input: {
+  name: string;
+  start: string;
+  timeZone: string;
+  challenge?: string;
+}): {
   subject: string;
   html: string;
 } {
@@ -69,6 +81,14 @@ export function bookingConfirmedEmail(input: { name: string; start: string; time
         You're confirmed for <strong>${when} (${input.timeZone})</strong>. It's on our calendar —
         you'll also get a separate calendar invite with the call link.
       </p>
+      ${
+        input.challenge
+          ? `<p style="margin:0 0 16px;">
+               Looking forward to it — we'll come prepared to talk through what you told us:
+             </p>
+             <p style="margin:0 0 16px;padding:12px;background:#f7f7f7;border-radius:8px;white-space:pre-wrap;">${input.challenge}</p>`
+          : ""
+      }
       <p style="margin:0 0 16px;">
         Need to change it? Just reply to this email and we'll sort out a new time.
       </p>
