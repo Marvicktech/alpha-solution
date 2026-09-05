@@ -24,17 +24,12 @@ import { Footer } from "@/components/site/Footer";
 import { ContactWidget } from "@/components/site/ContactWidget";
 import type { ServiceId } from "@/components/site/data";
 import { track } from "@/lib/analytics";
+import { SITE_URL, OG_IMAGE_URL } from "@/lib/seo";
 
 const TITLE =
   "Alpha Presence | Digital Presence, UI/UX & Automation for UK Local Businesses";
 const DESCRIPTION =
   "Alpha Presence helps UK local businesses get found on Google and AI search, look credible, and run smoother, with design, UI/UX, automation and SEO/AEO/GEO built in plain English. Book a free consultation.";
-
-// Used to make canonical/og/twitter URLs absolute — search engines and social
-// platforms treat a relative canonical/og:url as ambiguous, so every URL
-// pushed into <head> below is built from this rather than left as "/".
-const SITE_URL = "https://alphapresence.studio";
-const OG_IMAGE_URL = `${SITE_URL}/og-image.png`;
 
 const SERVICE_SCHEMA = [
   {

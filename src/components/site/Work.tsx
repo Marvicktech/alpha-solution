@@ -1,13 +1,15 @@
 import { ArrowUpRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
 import onomzSite from "@/assets/onomz-site.jpg";
 import onomzSiteWebp from "@/assets/onomz-site.webp";
 import s9Site from "@/assets/s9-direct-motor.jpg";
 import s9SiteWebp from "@/assets/s9-direct-motor.webp";
 
-const PROJECTS = [
+export const PROJECTS = [
   {
     name: "Onomz Investments",
+    slug: "onomz-investments",
     sector: "Hair and braiding salon · Aberdeen, Scotland",
     href: "https://onomzinvestments.co.uk",
     domain: "onomzinvestments.co.uk",
@@ -23,6 +25,7 @@ const PROJECTS = [
   },
   {
     name: "S9 Direct Motor",
+    slug: "s9-direct-motor",
     sector: "DVSA-approved MOT testing centre · Sheffield, England",
     href: "https://s9directmotor.com",
     domain: "s9directmotor.com",
@@ -54,7 +57,8 @@ export function Work() {
 
         <div className="mt-14 grid gap-6 md:grid-cols-2">
           {PROJECTS.map((p, i) => (
-            <Reveal key={p.name} delay={i * 90}>
+            <div key={p.name}>
+              <Reveal delay={i * 90}>
               <a
                 href={p.href}
                 target="_blank"
@@ -117,7 +121,15 @@ export function Work() {
                   <span className="mt-4 block text-sm font-semibold text-primary">{p.domain}</span>
                 </div>
               </a>
-            </Reveal>
+              </Reveal>
+              <Link
+                to={`/work/${p.slug}`}
+                className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+              >
+                Read the full case study
+                <ArrowUpRight className="size-3.5" aria-hidden="true" />
+              </Link>
+            </div>
           ))}
         </div>
       </div>

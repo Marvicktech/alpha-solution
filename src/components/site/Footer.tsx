@@ -25,11 +25,14 @@ export function Footer() {
             <h2 className="text-sm font-semibold tracking-[0.2em] uppercase">Explore</h2>
             <ul className="mt-4 space-y-2 text-sm text-on-ink-muted">
               {[
-                ["#services", "Services"],
-                ["#work", "Work"],
-                ["#how-it-works", "How we work"],
-                ["#faq", "FAQ"],
-                ["#book", "Book a consultation"],
+                // Absolute path + hash (not a bare "#anchor") so this footer
+                // works correctly on subpages too — like /work/onomz-investments
+                // — not only when it's rendered on the homepage itself.
+                ["/#services", "Services"],
+                ["/#work", "Work"],
+                ["/#how-it-works", "How we work"],
+                ["/#faq", "FAQ"],
+                ["/#book", "Book a consultation"],
               ].map(([href, label]) => (
                 <li key={href}>
                   <a href={href} className="transition-colors hover:text-on-ink">

@@ -1,7 +1,7 @@
 import { Quote } from "lucide-react";
 import { Reveal } from "./Reveal";
 
-const TESTIMONIALS = [
+export const TESTIMONIALS = [
   {
     category: "Website Conversion",
     quote:
