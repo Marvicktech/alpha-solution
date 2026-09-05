@@ -1,7 +1,9 @@
 import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "./Reveal";
 import onomzSite from "@/assets/onomz-site.jpg";
+import onomzSiteWebp from "@/assets/onomz-site.webp";
 import s9Site from "@/assets/s9-direct-motor.jpg";
+import s9SiteWebp from "@/assets/s9-direct-motor.webp";
 
 const PROJECTS = [
   {
@@ -16,6 +18,7 @@ const PROJECTS = [
     // number we're estimating. Leave unset (see S9) rather than invent one.
     stat: "+15 customers in week 1",
     image: onomzSite,
+    imageWebp: onomzSiteWebp,
     alt: "Homepage of the Onomz website, a hair and braiding salon in Aberdeen, built by Alpha Presence",
   },
   {
@@ -28,6 +31,7 @@ const PROJECTS = [
     outcome: "Built around how drivers actually search for an MOT.",
     stat: undefined as string | undefined,
     image: s9Site,
+    imageWebp: s9SiteWebp,
     alt: "Homepage of the S9 Direct Motor website, a DVSA-approved MOT testing centre, built by Alpha Presence",
   },
 ];
@@ -60,13 +64,16 @@ export function Work() {
                 <div className="relative aspect-[16/9] overflow-hidden bg-secondary">
                   {p.image ? (
                     <>
-                      <img
-                        src={p.image}
-                        alt={p.alt}
-                        loading="lazy"
-                        decoding="async"
-                        className="size-full object-cover object-top saturate-[0.8] transition-transform duration-500 group-hover:scale-[1.03]"
-                      />
+                      <picture className="contents">
+                        {p.imageWebp && <source srcSet={p.imageWebp} type="image/webp" />}
+                        <img
+                          src={p.image}
+                          alt={p.alt}
+                          loading="lazy"
+                          decoding="async"
+                          className="size-full object-cover object-top saturate-[0.8] transition-transform duration-500 group-hover:scale-[1.03]"
+                        />
+                      </picture>
                       {/* Brand-pink duotone tint, so the screenshots read as
                           "part of this site" instead of plain unedited photos. */}
                       <div

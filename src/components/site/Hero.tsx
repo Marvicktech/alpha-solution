@@ -4,6 +4,7 @@ import { Reveal } from "./Reveal";
 import { CountUp } from "./CountUp";
 import { track } from "@/lib/analytics";
 import heroPhoto from "@/assets/hero-photo-2.jpg";
+import heroPhotoWebp from "@/assets/hero-photo-2.webp";
 
 const STATS = [
   { value: "99%", label: "research a local business online first" },
@@ -66,17 +67,19 @@ function HeroBackground() {
           up, content roughly fits one screen again, so the photo goes back
           to filling the full container as before.
 
-          `.hero-photo-breathe` (styles.css) adds a slow, soft loop on top —
-          a gentle scale + a couple of percent of object-position drift, 14s
-          ease-in-out — so the photo feels quietly alive without looking like
+          `.hero-photo-breathe` (styles.css) adds a slow, soft scale-only
+          loop on top so the photo feels quietly alive without looking like
           a video background. Disabled under prefers-reduced-motion. */}
-      <img
-        src={heroPhoto}
-        alt=""
-        className="hero-photo-breathe absolute inset-x-0 top-0 h-[58svh] w-full object-cover object-[80%_0%] [-webkit-mask-image:linear-gradient(to_bottom,#000_80%,transparent_100%)] [mask-image:linear-gradient(to_bottom,#000_80%,transparent_100%)] sm:inset-0 sm:h-full sm:[-webkit-mask-image:none] sm:[mask-image:none]"
-        loading="eager"
-        fetchPriority="high"
-      />
+      <picture className="contents">
+        <source srcSet={heroPhotoWebp} type="image/webp" />
+        <img
+          src={heroPhoto}
+          alt=""
+          className="hero-photo-breathe absolute inset-x-0 top-0 h-[58svh] w-full object-cover object-[80%_0%] [-webkit-mask-image:linear-gradient(to_bottom,#000_80%,transparent_100%)] [mask-image:linear-gradient(to_bottom,#000_80%,transparent_100%)] sm:inset-0 sm:h-full sm:[-webkit-mask-image:none] sm:[mask-image:none]"
+          loading="eager"
+          fetchPriority="high"
+        />
+      </picture>
 
       {/* Left-to-right gradient (red, not ink, so it blends with the photo's
           own red background) so the headline stays readable over whatever

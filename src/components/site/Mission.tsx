@@ -1,5 +1,6 @@
 import { Reveal } from "./Reveal";
 import consultationPhoto from "@/assets/mission-consultation.jpg";
+import consultationPhotoWebp from "@/assets/mission-consultation.webp";
 
 export function Mission() {
   return (
@@ -28,13 +29,16 @@ export function Mission() {
               sits in its own column beside the text. */}
           <div className="relative mx-auto w-[82%] max-w-xs sm:max-w-sm lg:w-full lg:max-w-none">
             <div className="aspect-[5/6] overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-card)]">
-              <img
-                src={consultationPhoto}
-                alt="A consultation session where a plan is talked through on a flip chart, the kind of plain-English walkthrough every Alpha Presence project starts with"
-                loading="lazy"
-                decoding="async"
-                className="photo-breathe size-full object-cover"
-              />
+              <picture className="contents">
+                <source srcSet={consultationPhotoWebp} type="image/webp" />
+                <img
+                  src={consultationPhoto}
+                  alt="A consultation session where a plan is talked through on a flip chart, the kind of plain-English walkthrough every Alpha Presence project starts with"
+                  loading="lazy"
+                  decoding="async"
+                  className="photo-breathe size-full object-cover"
+                />
+              </picture>
             </div>
             <span className="absolute -bottom-4 left-4 max-w-[calc(100%-2rem)] rounded-xl border border-border bg-card px-3.5 py-2 text-xs leading-snug font-bold shadow-[var(--shadow-card)]">
               Where every project starts

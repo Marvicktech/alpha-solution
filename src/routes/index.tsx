@@ -30,6 +30,12 @@ const TITLE =
 const DESCRIPTION =
   "Alpha Presence helps UK local businesses get found on Google and AI search, look credible, and run smoother, with design, UI/UX, automation and SEO/AEO/GEO built in plain English. Book a free consultation.";
 
+// Used to make canonical/og/twitter URLs absolute — search engines and social
+// platforms treat a relative canonical/og:url as ambiguous, so every URL
+// pushed into <head> below is built from this rather than left as "/".
+const SITE_URL = "https://alphapresence.studio";
+const OG_IMAGE_URL = `${SITE_URL}/og-image.png`;
+
 const SERVICE_SCHEMA = [
   {
     name: "Website Design & Build",
@@ -64,9 +70,10 @@ const SERVICE_SCHEMA = [
 const ORGANIZATION_LD = {
   "@context": "https://schema.org",
   "@type": ["Organization", "ProfessionalService"],
-  "@id": "/#organization",
+  "@id": `${SITE_URL}/#organization`,
   name: "Alpha Presence",
-  url: "/",
+  url: `${SITE_URL}/`,
+  image: OG_IMAGE_URL,
   description: DESCRIPTION,
   slogan: "Get found, look credible, convert more.",
   areaServed: { "@type": "Country", name: "United Kingdom" },
@@ -90,7 +97,7 @@ const ORGANIZATION_LD = {
       description: s.description,
       serviceType: s.name,
       areaServed: { "@type": "Country", name: "United Kingdom" },
-      provider: { "@id": "/#organization" },
+      provider: { "@id": `${SITE_URL}/#organization` },
     },
   })),
   hasOfferCatalog: {
@@ -111,14 +118,22 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: SITE_URL + "/" },
       { property: "og:site_name", content: "Alpha Presence" },
       { property: "og:locale", content: "en_GB" },
+      { property: "og:image", content: OG_IMAGE_URL },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      {
+        property: "og:image:alt",
+        content: "Alpha Presence — UK digital agency for local businesses",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE_URL },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: SITE_URL + "/" }],
     scripts: [
       { type: "application/ld+json", children: JSON.stringify(ORGANIZATION_LD) },
       {

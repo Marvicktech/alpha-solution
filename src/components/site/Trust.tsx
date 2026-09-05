@@ -39,11 +39,16 @@ export function Trust() {
 
         <dl className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2">
           {POINTS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 80} className="bg-ink">
-              <div className="h-full p-7">
-                <dt className="text-lg font-bold text-on-ink">{p.title}</dt>
-                <dd className="mt-2 text-on-ink-muted">{p.body}</dd>
-              </div>
+            // `<dl>`'s content model only allows a wrapping element around a
+            // dt/dd pair if that wrapper is a <div> whose OWN direct children
+            // are the dt/dd — nesting Reveal's div AND a second inner div
+            // (as this used to) put the dt/dd two levels deep, which is what
+            // Lighthouse's "dl doesn't contain only dt/dd/div groups" audit
+            // flags. Reveal already renders a single <div>, so its className
+            // absorbs what the removed inner wrapper used to carry.
+            <Reveal key={p.title} delay={i * 80} className="h-full bg-ink p-7">
+              <dt className="text-lg font-bold text-on-ink">{p.title}</dt>
+              <dd className="mt-2 text-on-ink-muted">{p.body}</dd>
             </Reveal>
           ))}
         </dl>

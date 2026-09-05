@@ -85,7 +85,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "Alpha Presence" },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://alphapresence.studio/og-image.png" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://alphapresence.studio/og-image.png" },
     ],
     links: [
       {

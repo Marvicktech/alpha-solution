@@ -58,8 +58,14 @@
   --popover: oklch(0.995 0.002 85);
   --popover-foreground: oklch(0.17 0.012 270);
 
-  /* vibrant brand red-pink (#F92C53) */
-  --primary: oklch(0.638 0.234 18);
+  /* Vibrant brand red-pink. Darkened from the original #F92C53 (L 0.638) to
+     #DE003D (L 0.565) — same hue/chroma, so it still reads as the same
+     brand color — because white button text on the old value only hit a
+     3.71:1 contrast ratio against WCAG AA's 4.5:1 minimum for normal text
+     (flagged by a Lighthouse accessibility audit). This also happens to
+     land closer to the deeper red (#da0418) already used in the email
+     templates and the OG share image. */
+  --primary: oklch(0.565 0.234 18);
   --primary-foreground: oklch(0.99 0 0);
   --primary-glow: oklch(0.717 0.181 12);
 
@@ -73,7 +79,7 @@
   --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(0.89 0.005 85);
   --input: oklch(0.89 0.005 85);
-  --ring: oklch(0.638 0.234 18);
+  --ring: oklch(0.565 0.234 18);
 
   /* near-black ink surfaces */
   --ink: oklch(0.151 0.006 286);
@@ -210,23 +216,21 @@
   animation: ambient-float 9s ease-in-out infinite;
 }
 
-/* Soft, slow breathing loop for the hero photo: a gentle scale + very slight
-   pan, nothing that reads as "video-loop" busy — closer to a photo that's
-   quietly alive. object-position is nudged a couple of percent rather than
-   translated, so it can't reveal the edge of the source image at any point
-   in the loop. */
+/* Soft, slow breathing loop for the hero photo: a gentle scale, nothing that
+   reads as "video-loop" busy — closer to a photo that's quietly alive.
+   transform-only (previously also animated object-position for a subtle
+   pan, but that property can't be GPU-composited — the browser has to
+   repaint the image on every frame — which a Lighthouse audit flagged as a
+   non-composited animation running continuously on the page's LCP image). */
 @keyframes hero-photo-breathe {
   0% {
     transform: scale(1);
-    object-position: 80% 0%;
   }
   50% {
     transform: scale(1.09);
-    object-position: 74% 4%;
   }
   100% {
     transform: scale(1);
-    object-position: 80% 0%;
   }
 }
 
@@ -269,16 +273,6 @@
   will-change: transform;
 }
 
-@keyframes cursor-breathe {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary-glow) 45%, transparent);
-  }
-  50% {
-    box-shadow: 0 0 14px 2px color-mix(in oklab, var(--primary-glow) 45%, transparent);
-  }
-}
-
 .cursor-dot {
   width: 6px;
   height: 6px;
@@ -287,12 +281,20 @@
   transition: opacity 0.15s ease;
 }
 
+/* Was a `cursor-breathe` box-shadow animation pulsing indefinitely (2.4s,
+   infinite) — box-shadow can't be GPU-composited, so the browser had to
+   repaint this on every frame for as long as the cursor was visible.
+   Lighthouse flags exactly this pattern. `transform`/`opacity` aren't an
+   option here either: CustomCursor.tsx already drives both of those inline,
+   every animation frame, to track the pointer — a CSS animation on the same
+   properties would fight it. A fixed glow keeps the look without an
+   ever-running repaint loop. */
 .cursor-ring {
   width: 26px;
   height: 26px;
   border: 1.5px solid color-mix(in oklab, var(--primary-glow) 70%, transparent);
   background: color-mix(in oklab, var(--primary) 8%, transparent);
-  animation: cursor-breathe 2.4s ease-in-out infinite;
+  box-shadow: 0 0 8px 1px color-mix(in oklab, var(--primary-glow) 25%, transparent);
   transition:
     opacity 0.2s ease,
     width 0.2s ease,
@@ -436,31 +438,6 @@ html.has-custom-cursor * {
   mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
 }
 
-/* Consultation-preview step mockup: each step's icon badge takes a slow
-   turn "lighting up" so the sequence quietly animates without looping fast
-   or feeling like a real recording. Apply with a per-step animationDelay
-   (see ConsultationPreview.tsx) so the three badges don't glow in unison. */
-@keyframes step-glow {
-  0%,
-  32%,
-  100% {
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary-glow) 0%, transparent);
-    transform: scale(1);
-  }
-  8% {
-    box-shadow: 0 0 0 8px color-mix(in oklab, var(--primary-glow) 22%, transparent);
-    transform: scale(1.06);
-  }
-  16% {
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary-glow) 0%, transparent);
-    transform: scale(1);
-  }
-}
-
-.step-glow {
-  animation: step-glow 9s ease-in-out infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ambient-float {
     animation: none;
@@ -475,10 +452,6 @@ html.has-custom-cursor * {
   }
 
   .marquee-track {
-    animation: none;
-  }
-
-  .step-glow {
     animation: none;
   }
 
