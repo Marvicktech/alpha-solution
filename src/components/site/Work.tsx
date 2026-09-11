@@ -51,7 +51,8 @@ export function Work() {
             Real businesses you can check for yourself.
           </h2>
           <p className="mt-4 text-muted-foreground">
-            We only show work that is live. Every link below opens the client's own site.
+            These are the early clients who trusted us first. We only show work that is live —
+            every link below opens the client's own site.
           </p>
         </Reveal>
 

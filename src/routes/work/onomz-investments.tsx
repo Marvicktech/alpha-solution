@@ -63,9 +63,14 @@ function OnomzCaseStudy() {
       <main>
         <section className="border-b border-border bg-background py-16 sm:py-20">
           <div className="mx-auto max-w-4xl px-5">
-            <p className="text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-              Case study
-            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-sm font-semibold tracking-[0.2em] text-muted-foreground uppercase">
+                Case study
+              </p>
+              <span className="rounded-full bg-secondary px-3 py-1 text-xs font-bold text-muted-foreground">
+                Founding client
+              </span>
+            </div>
             <h1 className="mt-4 heading-2 font-extrabold">{PROJECT.name}</h1>
             <p className="mt-2 text-muted-foreground">{PROJECT.sector}</p>
             <p className="mt-6 max-w-2xl text-lg text-muted-foreground">{PROJECT.summary}</p>

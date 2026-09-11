@@ -8,6 +8,7 @@ import { Mission } from "@/components/site/Mission";
 import { Problems } from "@/components/site/Problems";
 import { ServicesPicker } from "@/components/site/ServicesPicker";
 import { BookingForm } from "@/components/site/BookingForm";
+import { OurStory } from "@/components/site/OurStory";
 import { Testimonial } from "@/components/site/Testimonial";
 import { WhereYoullShowUp } from "@/components/site/WhereYoullShowUp";
 import { Work } from "@/components/site/Work";
@@ -212,6 +213,7 @@ function Index() {
         <Problems />
         <ServicesPicker selected={selected} onSelect={handleSelect} showHuman={showHuman} />
         <BookingForm />
+        <OurStory />
         <Testimonial />
         <WhereYoullShowUp />
         <Work />

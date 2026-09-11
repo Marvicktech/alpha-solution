@@ -59,10 +59,13 @@ export function Testimonial() {
       <div className="hero-glow absolute inset-0 opacity-30" aria-hidden="true" />
       <div className="relative mx-auto max-w-6xl px-5">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="eyebrow-text text-primary-glow">What clients say</p>
+          <p className="eyebrow-text text-primary-glow">Our founding clients</p>
           <h2 className="heading-2 mt-4 font-extrabold text-balance text-on-ink">
-            Real results, from real UK businesses
+            Real results, from the businesses that trusted us first
           </h2>
+          <p className="mt-4 text-sm text-on-ink-muted">
+            Every quote and number below is real and measured, not estimated.
+          </p>
         </Reveal>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
